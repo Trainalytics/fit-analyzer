@@ -32,6 +32,11 @@ $lap_endPositionLat = [];
 $lap_endPositionLong = [];
 $lap_totalElapsedTime = [];
 $lap_totalDistance = [];
+$lap_totalStrides = [];
+$lap_avgSpeed = [];
+$lap_maxSpeed = [];
+$lap_minAltitude = [];
+$lap_maxAltitude = [];
 
 parseLapData($data);
 
@@ -50,7 +55,12 @@ function parseLapData($data)
 		$lap_endPositionLat,
 		$lap_endPositionLong,
 		$lap_totalElapsedTime,
-		$lap_totalDistance;
+		$lap_totalDistance,
+		$lap_totalStrides,
+		$lap_avgSpeed,
+		$lap_maxSpeed,
+		$lap_minAltitude,
+		$lap_maxAltitude;
 
 	$date = new DateTime();
 
@@ -82,14 +92,26 @@ function parseLapData($data)
 			if (isset($data[$i][8]) && is_numeric($data[$i][8])) {
 				$lap_totalDistance[] = $data[$i][8];
 			}
+			if (isset($data[$i][9]) && is_numeric($data[$i][9])) {
+				$lap_totalStrides[] = $data[$i][9];
+			}
+			if (isset($data[$i][10]) && is_numeric($data[$i][10])) {
+				$lap_avgSpeed[] = $data[$i][10];
+			}
+			if (isset($data[$i][11]) && is_numeric($data[$i][11])) {
+				$lap_maxSpeed[] = $data[$i][11];
+			}
+			if (isset($data[$i][12]) && is_numeric($data[$i][12])) {
+				$lap_minAltitude[] = $data[$i][12];
+			}
+			if (isset($data[$i][13]) && is_numeric($data[$i][13])) {
+				$lap_maxAltitude[] = $data[$i][12];
+			}
 		} else {
 			return;
 		}
 	}
 }
-
-var_dump($lap_totalElapsedTime);
-var_dump($lap_totalDistance);
 
 /**
  * Function to convert semicircles to degrees
