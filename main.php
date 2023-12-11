@@ -24,6 +24,7 @@ foreach ($data as $values) {
 }
 echo "</tbody></table>";
 
+// Base data about lap
 $lap_timestamp = [];
 $lap_startTime = [];
 $lap_startPositionLat = [];
@@ -37,6 +38,14 @@ $lap_avgSpeed = [];
 $lap_maxSpeed = [];
 $lap_minAltitude = [];
 $lap_maxAltitude = [];
+$lap_totalAscent = [];
+$lap_totalDescent = [];
+$lap_avgHeartRate = [];
+$lap_maxHeartRate = [];
+$lap_avgTemperature = [];
+$lap_maxTemperature = [];
+
+// Other properties
 
 parseLapData($data);
 
@@ -48,19 +57,9 @@ function parseLapData($data)
 {
 	$datetimeFormat = 'H:i:s';
 	global
-		$lap_timestamp,
-		$lap_startTime,
-		$lap_startPositionLat,
-		$lap_startPositionLong,
-		$lap_endPositionLat,
-		$lap_endPositionLong,
-		$lap_totalElapsedTime,
-		$lap_totalDistance,
-		$lap_totalStrides,
-		$lap_avgSpeed,
-		$lap_maxSpeed,
-		$lap_minAltitude,
-		$lap_maxAltitude;
+		$lap_timestamp, $lap_startTime, $lap_startPositionLat, $lap_startPositionLong, $lap_endPositionLat, $lap_endPositionLong,
+		$lap_totalElapsedTime, $lap_totalDistance, $lap_totalStrides, $lap_avgSpeed, $lap_maxSpeed, $lap_minAltitude, $lap_maxAltitude,
+		$lap_totalAscent, $lap_totalDescent, $lap_avgHeartRate, $lap_maxHeartRate, $lap_avgTemperature, $lap_maxTemperature;
 
 	$date = new DateTime();
 
