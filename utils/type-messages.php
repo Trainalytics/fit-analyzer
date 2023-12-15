@@ -1618,22 +1618,33 @@ $data_mesg_info = [
 		9 => ['field_name' => 'o2_toxicity', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'OTUs', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		10 => ['field_name' => 'dive_number', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		11 => ['field_name' => 'bottom_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
-
 		12 => ['field_name' => 'avg_pressure_sac', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'bar/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average pressure-based surface air consumption (e.g )
 		13 => ['field_name' => 'avg_volume_sac', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'L/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average volumetric surface air consumption (e.g )
 		14 => ['field_name' => 'avg_rmv', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'L/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average respiratory minute volume (e.g )
 		15 => ['field_name' => 'descent_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time to reach deepest level stop (e.g )
 		16 => ['field_name' => 'ascent_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time after leaving bottom until reaching surface (e.g )
-
 		17 => ['field_name' => 'avg_ascent_rate', 'field_type' => 'sint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average ascent rate, not including descents or stops (e.g. )
 		22 => ['field_name' => 'avg_descent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average descent rate, not including ascents or stops (e.g. )
 		23 => ['field_name' => 'max_ascent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Maximum ascent rate (e.g. )
 		24 => ['field_name' => 'max_descent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Maximum descent rate (e.g. )
 		25 => ['field_name' => 'hang_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time spent neither ascending nor descending (e.g. )
 	]],
-	78 => [
-		'mesg_name' => 'hrv', 'field_defns' => [
-			0 => ['field_name' => 'time', 'field_type' => 'uint16', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time between beats (e.g. 1)
-		]
-	]
+	78 => ['mesg_name' => 'hrv', 'field_defns' => [
+		0 => ['field_name' => 'time', 'field_type' => 'uint16', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time between beats (e.g. 1)
+	]],
+	290 => ['mesg_name' => 'beat_intervals', 'field_defns' => [ // Array of heart beat intervals
+		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		0 => ['field_name' => 'timestamp_ms', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Milliseconds past date_time (e.g. )
+		1 => ['field_name' => 'time', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Array of millisecond times between beats (e.g. )
+	]],
+	370 => ['mesg_name' => 'hrv_status_summary', 'field_defns' => [
+		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		0 => ['field_name' => 'weekly_average', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 7 day RMSSD average over sleep (e.g. )
+		1 => ['field_name' => 'last_nigh_average', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Last night RMSSD average over sleep (e.g. )
+		2 => ['field_name' => 'last_night_5_min_high', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 5 minute high RMSSD value over sleep (e.g. )
+		3 => ['field_name' => 'baseline_low_upper', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 3 week baseline, upper boundary of low HRV status (e.g. )
+		4 => ['field_name' => 'baseline_balanced_lower', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 3 week baseline, lower boundary of balanced HRV status (e.g. )
+		5 => ['field_name' => 'baseline_balanced_upper', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 3 week baseline, upper boundary of balanced HRV status (e.g. )
+		6 => ['field_name' => 'status', 'field_type' => 'hrv_status', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+	]],
 ];
