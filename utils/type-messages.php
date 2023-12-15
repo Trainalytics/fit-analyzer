@@ -1510,9 +1510,9 @@ $data_mesg_info = [
 		34 => ['field_name' => 'vigorous_activity_minutes', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'minutes', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 	]],
 	211 => ['mesg_name' => 'monitoring_hr_data', 'field_defns' => [
-		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Must align to logging interval, for example, time must be 00:00:00 for daily log.
-		0 => ['field_name' => 'resting_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 7-day rolling average
-		1 => ['field_name' => 'current_day_resting_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // RHR for today only. (Feeds into 7-day average)
+		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Must align to logging interval, for example, time must be 00:00:00 for daily log. (e.g. )
+		0 => ['field_name' => 'resting_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 7-day rolling average (e.g. )
+		1 => ['field_name' => 'current_day_resting_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // RHR for today only. (Feeds into 7-day average) (e.g. )
 	]],
 	269 => ['mesg_name' => 'spo2_data', 'field_defns' => [
 		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -1531,6 +1531,16 @@ $data_mesg_info = [
 	227 => ['mesg_name' => 'stress_level', 'field_defns' => [
 		0 => ['field_name' => 'stress_level_value', 'field_type' => 'sint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		1 => ['field_name' => 'stress_level_time', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time stress score was calculated (e.g. )
+	]],
+	229 => ['mesg_name' => 'max_met_data', 'field_defns' => [
+		0 => ['field_name' => 'update_time', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time maxMET and vo2 were calculated (e.g. )
+		2 => ['field_name' => 'vo2_max', 'field_type' => 'uint16', 'scale' => 10, 'offset' => 0, 'units' => 'mL/kg/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		5 => ['field_name' => 'sport', 'field_type' => 'sport', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		6 => ['field_name' => 'sub_sport', 'field_type' => 'sub_sport', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		8 => ['field_name' => 'max_met_category', 'field_type' => 'max_met_category', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		9 => ['field_name' => 'calibrated_data', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Indicates if calibrated data was used in the calculation (e.g )
+		12 => ['field_name' => 'hr_source', 'field_type' => 'max_met_heart_rate_source', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Indicates if the estimate was obtained using a chest strap or wrist heart rate (e.g )
+		13 => ['field_name' => 'speed_source', 'field_type' => 'max_met_speed_source', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Indidcates if the estimate was obtained using onboard GPS or connected GPS (e.g. )
 	]],
 	145 => ['mesg_name' => 'memo_glob', 'field_defns' => [
 		250 => ['field_name' => 'part_index', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Sequence number of memo blocks (e.g. )
