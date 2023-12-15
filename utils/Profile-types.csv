@@ -1,18 +1,18 @@
-Type Name,Base Type,Value Name,Value,Comment
+﻿Type Name,Base Type,Value Name,Value,Comment
 file,enum,,,
-,,device,1,"Read only, single file. Must be in root directory."
-,,settings,2,"Read/write, single file. Directory=Settings"
-,,sport,3,"Read/write, multiple files, file number = sport type. Directory=Sports"
-,,activity,4,"Read/erase, multiple files. Directory=Activities"
-,,workout,5,"Read/write/erase, multiple files. Directory=Workouts"
-,,course,6,"Read/write/erase, multiple files. Directory=Courses"
-,,schedules,7,"Read/write, single file. Directory=Schedules"
-,,weight,9,"Read only, single file. Circular buffer. All message definitions at start of file. Directory=Weight"
-,,totals,10,"Read only, single file. Directory=Totals"
-,,goals,11,"Read/write, single file. Directory=Goals"
+,,device,1,Read only, single file. Must be in root directory.
+,,settings,2,Read/write, single file. Directory=Settings
+,,sport,3,Read/write, multiple files, file number = sport type. Directory=Sports
+,,activity,4,Read/erase, multiple files. Directory=Activities
+,,workout,5,Read/write/erase, multiple files. Directory=Workouts
+,,course,6,Read/write/erase, multiple files. Directory=Courses
+,,schedules,7,Read/write, single file. Directory=Schedules
+,,weight,9,Read only, single file. Circular buffer. All message definitions at start of file. Directory=Weight
+,,totals,10,Read only, single file. Directory=Totals
+,,goals,11,Read/write, single file. Directory=Goals
 ,,blood_pressure,14,Read only. Directory=Blood Pressure
 ,,monitoring_a,15,Read only. Directory=Monitoring. File number=sub type.
-,,activity_summary,20,"Read/erase, multiple files. Directory=Activities"
+,,activity_summary,20,Read/erase, multiple files. Directory=Activities
 ,,monitoring_daily,28,
 ,,monitoring_b,32,Read only. Directory=Monitoring. File number=identifier
 ,,segment,34,Read/write/erase. Multiple Files. Directory=Segments
@@ -100,18 +100,31 @@ mesg_num,uint16,,,
 ,,magnetometer_data,208,
 ,,barometer_data,209,
 ,,one_d_sensor_calibration,210,
+,,monitoring_hr_data,211,
 ,,time_in_zone,216,
 ,,set,225,
 ,,stress_level,227,
+,,max_met_data,229,
 ,,dive_settings,258,
 ,,dive_gas,259,
 ,,dive_alarm,262,
 ,,exercise_title,264,
 ,,dive_summary,268,
+,,spo2_data,269,
+,,sleep_level,275,
 ,,jump,285,
+,,beat_intervals,290,
+,,respiration_rate,297,
 ,,split,312,
+,,split_summary,313,
 ,,climb_pro,317,
+,,tank_update,319,
+,,tank_summary,323,
+,,sleep_assessment,346,
+,,hrv_status_summary,370,
+,,hrv_value,371,
 ,,device_aux_battery_info,375,
+,,dive_apnea_alarm,393,
 ,,mfg_range_min,0xFF00,0xFF00 - 0xFFFE reserved for manufacturer specific messages
 ,,mfg_range_max,0xFFFE,0xFF00 - 0xFFFE reserved for manufacturer specific messages
 checksum,uint8,,,
@@ -437,7 +450,11 @@ sport,enum,,,
 ,,boxing,47,
 ,,floor_climbing,48,
 ,,diving,53,
+,,hiit,62,
 ,,racket,64,
+,,wheelchair_push_walk,65,
+,,wheelchair_push_run,66,
+,,meditation,67,
 ,,water_tubing,76,
 ,,wakesurfing,77,
 ,,all,254,All is for goals only to include all sports.
@@ -557,14 +574,31 @@ sub_sport,enum,,,
 ,,apnea_diving,56,Diving
 ,,apnea_hunting,57,Diving
 ,,virtual_activity,58,
-,,obstacle,59,"Used for events where participants run, crawl through mud, climb over walls, etc."
+,,obstacle,59,Used for events where participants run, crawl through mud, climb over walls, etc.
 ,,breathing,62,
 ,,sail_race,65,Sailing
 ,,ultra,67,Ultramarathon
 ,,indoor_climbing,68,Climbing
 ,,bouldering,69,Climbing
+,,hiit,70,High Intensity Interval Training
+,,amrap,73,HIIT
+,,emom,74,HIIT
+,,tabata,75,HIIT
 ,,pickleball,84,Racket
 ,,padel,85,Racket
+,,indoor_wheelchair_walk,86,
+,,indoor_wheelchair_run,87,
+,,indoor_hand_cycling,88,
+,,fly_canopy,110,Flying
+,,fly_paraglide,111,Flying
+,,fly_paramotor,112,Flying
+,,fly_pressurized,113,Flying
+,,fly_navigate,114,Flying
+,,fly_timer,115,Flying
+,,fly_altimeter,116,Flying
+,,fly_wx,117,Flying
+,,fly_vfr,118,Flying
+,,fly_ifr,119,Flying
 ,,all,254,
 sport_event,enum,,,
 ,,uncategorized,0,
@@ -641,7 +675,7 @@ event,enum,,,
 ,,lap,9,Stop at end of each lap.
 ,,course_point,10,marker
 ,,battery,11,marker
-,,virtual_partner_pace,12,"Group 1. Start at beginning of activity if VP enabled, when VP pace is changed during activity or VP enabled mid activity. stop_disable when VP disabled."
+,,virtual_partner_pace,12,Group 1. Start at beginning of activity if VP enabled, when VP pace is changed during activity or VP enabled mid activity. stop_disable when VP disabled.
 ,,hr_high_alert,13,Group 0. Start / stop when in alert condition.
 ,,hr_low_alert,14,Group 0. Start / stop when in alert condition.
 ,,speed_high_alert,15,Group 0. Start / stop when in alert condition.
@@ -667,7 +701,16 @@ event,enum,,,
 ,,elev_high_alert,45,Group 0. Start / stop when in alert condition.
 ,,elev_low_alert,46,Group 0. Start / stop when in alert condition.
 ,,comm_timeout,47,marker
+,,auto_activity_detect,54,marker
+,,dive_alert,56,marker
+,,dive_gas_switched,57,marker
+,,tank_pressure_reserve,71,marker
+,,tank_pressure_critical,72,marker
+,,tank_lost,73,marker
 ,,radar_threat_alert,75,start/stop/marker
+,,tank_battery_low,76,marker
+,,tank_pod_connected,81,marker - tank pod has connected
+,,tank_pod_disconnected,82,marker - tank pod has lost connection
 event_type,enum,,,
 ,,start,0,
 ,,stop,1,
@@ -977,6 +1020,11 @@ manufacturer,uint16,,,
 ,,keiser_fitness,143,
 ,,zwift_byte,144,
 ,,porsche_ep,145,
+,,blackbird,146,
+,,meilan_byte,147,
+,,ezon,148,
+,,laisi,149,
+,,myzone,150,
 ,,development,255,
 ,,healthandlife,257,
 ,,lezyne,258,
@@ -1044,6 +1092,11 @@ manufacturer,uint16,,,
 ,,lsec,320,Lishun Electric & Communication
 ,,lululemon_studio,321,
 ,,shanyue,322,
+,,spinning_mda,323,
+,,hilldating,324,
+,,aero_sensor,325,
+,,nike,326,
+,,magicshine,327,
 ,,actigraphcorp,5759,
 garmin_product,uint16,,,
 ,,hrm1,1,
@@ -1222,6 +1275,7 @@ garmin_product,uint16,,,
 ,,fenix3_hr_kor,2477,
 ,,nautix,2496,
 ,,vivo_active_hr_apac,2497,
+,,fr35,2503,
 ,,oregon7xx_ww,2512,
 ,,edge_820,2530,
 ,,edge_explore_820,2531,
@@ -1296,6 +1350,7 @@ garmin_product,uint16,,,
 ,,fenix5s_plus_apac,3134,
 ,,fenix5x_plus_apac,3135,
 ,,edge_520_plus_apac,3142,
+,,descent_t1,3143,
 ,,fr235l_asia,3144,
 ,,fr245_asia,3145,
 ,,vivo_active3m_apac,3163,
@@ -1374,6 +1429,7 @@ garmin_product,uint16,,,
 ,,marq_golfer,3739,
 ,,venu_daimler,3740,
 ,,fr745_asia,3794,
+,,varia_rct715,3808,
 ,,lily_asia,3809,
 ,,edge_1030_plus_asia,3812,
 ,,edge_130_plus_asia,3813,
@@ -1383,6 +1439,7 @@ garmin_product,uint16,,,
 ,,edge_1040,3843,
 ,,marq_golfer_asia,3850,
 ,,venu2_plus,3851,
+,,gnss,3865,
 ,,fr55,3869,
 ,,instinct_2,3888,
 ,,fenix7s,3905,
@@ -1400,6 +1457,7 @@ garmin_product,uint16,,,
 ,,venu2_asia,3950,
 ,,fr945_lte_asia,3978,
 ,,vivo_move_sport,3982,
+,,vivomove_trend,3983,
 ,,approach_S12_asia,3986,
 ,,fr255_music,3990,
 ,,fr255_small_music,3991,
@@ -1411,9 +1469,11 @@ garmin_product,uint16,,,
 ,,venu2_plus_asia,4017,
 ,,fr955,4024,
 ,,fr55_asia,4033,
+,,edge_540,4061,
+,,edge_840,4062,
 ,,vivosmart_5,4063,
 ,,instinct_2_asia,4071,
-,,marq_gen2,4105,"Adventurer, Athlete, Captain, Golfer"
+,,marq_gen2,4105,Adventurer, Athlete, Captain, Golfer
 ,,venusq2,4115,
 ,,venusq2music,4116,
 ,,marq_gen2_aviator,4124,
@@ -1423,20 +1483,37 @@ garmin_product,uint16,,,
 ,,tactix7,4135,
 ,,instinct_crossover,4155,
 ,,edge_explore2,4169,
-,,tacx_neo_smart,4265,"Neo Smart, Tacx"
-,,tacx_neo2_smart,4266,"Neo 2 Smart, Tacx"
-,,tacx_neo2_t_smart,4267,"Neo 2T Smart, Tacx"
-,,tacx_neo_smart_bike,4268,"Neo Smart Bike, Tacx"
-,,tacx_satori_smart,4269,"Satori Smart, Tacx"
-,,tacx_flow_smart,4270,"Flow Smart, Tacx"
-,,tacx_vortex_smart,4271,"Vortex Smart, Tacx"
-,,tacx_bushido_smart,4272,"Bushido Smart, Tacx"
-,,tacx_genius_smart,4273,"Genius Smart, Tacx"
-,,tacx_flux_flux_s_smart,4274,"Flux/Flux S Smart, Tacx"
-,,tacx_flux2_smart,4275,"Flux 2 Smart, Tacx"
-,,tacx_magnum,4276,"Magnum, Tacx"
+,,approach_s70,4233,
+,,fr265_large,4257,
+,,fr265_small,4258,
+,,venu3,4260,
+,,venu3s,4261,
+,,tacx_neo_smart,4265,Neo Smart, Tacx
+,,tacx_neo2_smart,4266,Neo 2 Smart, Tacx
+,,tacx_neo2_t_smart,4267,Neo 2T Smart, Tacx
+,,tacx_neo_smart_bike,4268,Neo Smart Bike, Tacx
+,,tacx_satori_smart,4269,Satori Smart, Tacx
+,,tacx_flow_smart,4270,Flow Smart, Tacx
+,,tacx_vortex_smart,4271,Vortex Smart, Tacx
+,,tacx_bushido_smart,4272,Bushido Smart, Tacx
+,,tacx_genius_smart,4273,Genius Smart, Tacx
+,,tacx_flux_flux_s_smart,4274,Flux/Flux S Smart, Tacx
+,,tacx_flux2_smart,4275,Flux 2 Smart, Tacx
+,,tacx_magnum,4276,Magnum, Tacx
 ,,edge_1040_asia,4305,
+,,epix_gen2_pro_42,4312,
+,,epix_gen2_pro_47,4313,
+,,epix_gen2_pro_51,4314,
+,,fr965,4315,
 ,,enduro2,4341,
+,,fenix7s_pro_solar,4374,
+,,fenix7_pro_solar,4375,
+,,fenix7x_pro_solar,4376,
+,,instinct_2x,4394,
+,,vivoactive5,4426,
+,,descent_t2,4442,
+,,marq_gen2_commander,4472,
+,,d2_mach1_pro,4556,
 ,,sdm4,10007,SDM4 footpod
 ,,edge_remote,10014,
 ,,tacx_training_app_win,20533,
@@ -1521,9 +1598,9 @@ course_capabilities,uint32z,,,
 ,,aviation,0x00001000,Denote course files to be used as flight plans
 weight,uint16,,,
 ,,calculating,0xFFFE,
-workout_hr,uint32,,,0 - 100 indicates% of max hr; >100 indicates bpm (255 max) plus 100
+workout_hr,uint32,,,"0 - 100 indicates% of max hr, >100 indicates bpm (255 max) plus 100"
 ,,bpm_offset,100,
-workout_power,uint32,,,0 - 1000 indicates % of functional threshold power; >1000 indicates watts plus 1000.
+workout_power,uint32,,,"0 - 1000 indicates % of functional threshold power, >1000 indicates watts plus 1000."
 ,,watts_offset,1000,
 bp_status,enum,,,
 ,,no_error,0,
@@ -1545,7 +1622,7 @@ swim_stroke,enum,,,
 ,,butterfly,3,
 ,,drill,4,
 ,,mixed,5,
-,,im,6,"IM is a mixed interval containing the same number of lengths for each of: Butterfly, Backstroke, Breaststroke, Freestyle, swam in that order."
+,,im,6,IM is a mixed interval containing the same number of lengths for each of: Butterfly, Backstroke, Breaststroke, Freestyle, swam in that order.
 activity_type,enum,,,
 ,,generic,0,
 ,,running,1,
@@ -1586,10 +1663,10 @@ side,enum,,,
 ,,left,1,
 left_right_balance,uint8,,,
 ,,mask,0x7F,% contribution
-,,right,0x80,"data corresponds to right if set, otherwise unknown"
+,,right,0x80,data corresponds to right if set, otherwise unknown
 left_right_balance_100,uint16,,,
 ,,mask,0x3FFF,% contribution scaled by 100
-,,right,0x8000,"data corresponds to right if set, otherwise unknown"
+,,right,0x8000,data corresponds to right if set, otherwise unknown
 length_type,enum,,,
 ,,idle,0,Rest period. Length with no strokes
 ,,active,1,Length with strokes.
@@ -1850,6 +1927,11 @@ ble_device_type,uint8,,,
 ,,bike_cadence,5,
 ,,footpod,6,
 ,,bike_trainer,7,Indoor-Bike FTMS protocol
+ant_channel_id,uint32z,,,
+,,ant_extended_device_number_upper_nibble,0xF0000000,
+,,ant_transmission_type_lower_nibble,0x0F000000,
+,,ant_device_type,0x00FF0000,
+,,ant_device_number,0x0000FFFF,
 display_orientation,enum,,,
 ,,auto,0,automatic if the device supports it
 ,,portrait,1,
@@ -1888,7 +1970,7 @@ power_phase_type,enum,,,
 ,,power_phase_center,3,
 camera_event_type,enum,,,
 ,,video_start,0,Start of video recording
-,,video_split,1,"Mark of video file split (end of one file, beginning of the other)"
+,,video_split,1,Mark of video file split (end of one file, beginning of the other)
 ,,video_end,2,End of video recording
 ,,photo_taken,3,Still photo taken
 ,,video_second_stream_start,4,
@@ -2245,6 +2327,9 @@ fit_base_unit,uint16,,,
 set_type,uint8,,,
 ,,rest,0,
 ,,active,1,
+max_met_category,enum,,,
+,,generic,0,
+,,cycling,1,
 exercise_category,uint16,,,
 ,,bench_press,0,
 ,,calf_raise,1,
@@ -3558,17 +3643,75 @@ water_type,enum,,,
 ,,en13319,2,
 ,,custom,3,
 tissue_model_type,enum,,,
-,,zhl_16c,0,"Buhlmann's decompression algorithm, version C"
+,,zhl_16c,0,Buhlmann's decompression algorithm, version C
 dive_gas_status,enum,,,
 ,,disabled,0,
 ,,enabled,1,
 ,,backup_only,2,
+dive_alert,enum,,,
+,,ndl_reached,0,
+,,gas_switch_prompted,1,
+,,near_surface,2,
+,,approaching_ndl,3,
+,,po2_warn,4,
+,,po2_crit_high,5,
+,,po2_crit_low,6,
+,,time_alert,7,
+,,depth_alert,8,
+,,deco_ceiling_broken,9,
+,,deco_complete,10,
+,,safety_stop_broken,11,
+,,safety_stop_complete,12,
+,,cns_warning,13,
+,,cns_critical,14,
+,,otu_warning,15,
+,,otu_critical,16,
+,,ascent_critical,17,
+,,alert_dismissed_by_key,18,
+,,alert_dismissed_by_timeout,19,
+,,battery_low,20,
+,,battery_critical,21,
+,,safety_stop_started,22,
+,,approaching_first_deco_stop,23,
+,,setpoint_switch_auto_low,24,
+,,setpoint_switch_auto_high,25,
+,,setpoint_switch_manual_low,26,
+,,setpoint_switch_manual_high,27,
+,,auto_setpoint_switch_ignored,28,
+,,switched_to_open_circuit,29,
+,,switched_to_closed_circuit,30,
+,,tank_battery_low,32,
+,,po2_ccr_dil_low,33,ccr diluent has low po2
+,,deco_stop_cleared,34,a deco stop has been cleared
+,,apnea_neutral_buoyancy,35,Target Depth Apnea Alarm triggered
+,,apnea_target_depth,36,Neutral Buoyance Apnea Alarm triggered
+,,apnea_surface,37,Surface Apnea Alarm triggered
+,,apnea_high_speed,38,High Speed Apnea Alarm triggered
+,,apnea_low_speed,39,Low Speed Apnea Alarm triggered
 dive_alarm_type,enum,,,
 ,,depth,0,Alarm when a certain depth is crossed
 ,,time,1,Alarm when a certain time has transpired
+,,speed,2,Alarm when a certain ascent or descent rate is exceeded
 dive_backlight_mode,enum,,,
 ,,at_depth,0,
 ,,always_on,1,
+sleep_level,enum,,,
+,,unmeasurable,0,
+,,awake,1,
+,,light,2,
+,,deep,3,
+,,rem,4,
+spo2_measurement_type,enum,,,
+,,off_wrist,0,
+,,spot_check,1,
+,,continuous_check,2,
+,,periodic,3,
+ccr_setpoint_switch_mode,enum,,,
+,,manual,0,User switches setpoints manually
+,,automatic,1,Switch automatically based on depth
+dive_gas_mode,enum,,,
+,,open_circuit,0,
+,,closed_circuit_diluent,1,
 favero_product,uint16,,,
 ,,assioma_uno,10,
 ,,assioma_duo,12,
@@ -3598,6 +3741,10 @@ climb_pro_event,enum,,,
 ,,approach,0,
 ,,start,1,
 ,,complete,2,
+gas_consumption_rate_type,enum,,,
+,,pressure_sac,0,Pressure-based Surface Air Consumption
+,,volume_sac,1,Volumetric Surface Air Consumption
+,,rmv,2,Respiratory Minute Volume
 tap_sensitivity,enum,,,
 ,,high,0,
 ,,medium,1,
@@ -3607,3 +3754,19 @@ radar_threat_level_type,enum,,,
 ,,threat_none,1,
 ,,threat_approaching,2,
 ,,threat_approaching_fast,3,
+max_met_speed_source,enum,,,
+,,onboard_gps,0,
+,,connected_gps,1,
+,,cadence,2,
+max_met_heart_rate_source,enum,,,
+,,whr,0,Wrist Heart Rate Monitor
+,,hrm,1,Chest Strap Heart Rate Monitor
+hrv_status,enum,,,
+,,none,0,
+,,poor,1,
+,,low,2,
+,,unbalanced,3,
+,,balanced,4,
+no_fly_time_mode,enum,,,
+,,standard,0,Standard Diver Alert Network no-fly guidance
+,,flat_24_hours,1,Flat 24 hour no-fly guidance

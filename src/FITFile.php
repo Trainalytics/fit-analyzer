@@ -44,6 +44,8 @@ if (!defined('FIT_UNIX_TS_DIFF')) {
 	define('FIT_UNIX_TS_DIFF', 631065600);
 }
 
+require_once('type_enums.php');
+
 class FITFile
 {
 	public $data_mesgs = [];  // Used to store the data read from the file in associative arrays.
@@ -58,7 +60,7 @@ class FITFile
 	private $php_trader_ext_loaded = false;  // Is the PHP Trader extension loaded? Use $this->sma() algorithm if not available.
 	private $types = null;                   // Set by $endianness depending on architecture in Definition Message.
 	private $garmin_timestamps = false;      // By default the constant FIT_UNIX_TS_DIFF will be added to timestamps.
-	// VERSION: 21.101
+	// VERSION: 21.126
 	// Automatically extracted from FIT SDK https://developer.garmin.com/fit/download/
 	// Extracted from CSV versions of the Profile Type tab in Profile.xlsx
 	private $enum_data = [
@@ -166,18 +168,31 @@ class FITFile
 			208 => 'magnetometer_data',
 			209 => 'barometer_data',
 			210 => 'one_d_sensor_calibration',
+			211 => 'monitoring_hr_data',
 			216 => 'time_in_zone',
 			225 => 'set',
 			227 => 'stress_level',
+			229 => 'max_met_data',
 			258 => 'dive_settings',
 			259 => 'dive_gas',
 			262 => 'dive_alarm',
 			264 => 'exercise_title',
 			268 => 'dive_summary',
+			269 => 'spo2_data',
+			275 => 'sleep_level',
 			285 => 'jump',
+			290 => 'beat_intervals',
+			297 => 'respiration_rate',
 			312 => 'split',
+			313 => 'split_summary',
 			317 => 'climb_pro',
+			319 => 'tank_update',
+			323 => 'tank_summary',
+			346 => 'sleep_assessment',
+			370 => 'hrv_status_summary',
+			371 => 'hrv_value',
 			375 => 'device_aux_battery_info',
+			393 => 'dive_apnea_alarm',
 			0xFF00 => 'mfg_range_min', // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 			0xFFFE => 'mfg_range_max', // 0xFF00 - 0xFFFE reserved for manufacturer specific messages
 		],
@@ -689,6 +704,19 @@ class FITFile
 			69 => 'bouldering', // Climbing
 			84 => 'pickleball', // Racket
 			85 => 'padel', // Racket
+			86 => 'indoor_wheelchair_walk',
+			87 => 'indoor_wheelchair_run',
+			88 => 'indoor_hand_cycling',
+			110 => 'fly_canopy', // Flying
+			111 => 'fly_paraglide', // Flying
+			112 => 'fly_paramotor', // Flying
+			113 => 'fly_pressurized', // Flying
+			114 => 'fly_navigate', // Flying
+			115 => 'fly_timer', // Flying
+			116 => 'fly_altimeter', // Flying
+			117 => 'fly_wx', // Flying
+			118 => 'fly_vfr', // Flying
+			119 => 'fly_ifr', // Flying
 			254 => 'all',
 		],
 		'sport_event' => [
@@ -813,7 +841,17 @@ class FITFile
 			45 => 'elev_high_alert', // Group 0. Start / stop when in alert condition.
 			46 => 'elev_low_alert', // Group 0. Start / stop when in alert condition.
 			47 => 'comm_timeout', // marker
+			54 => 'auto_activity_detect', // marker
+			56 => 'dive_alert', // marker
+			57 => 'dive_gas_switched', // marker
+			71 => 'tank_pressure_reserve', // marker
+			72 => 'tank_pressure_critical', // marker
+			73 => 'tank_lost', // marker
 			75 => 'radar_threat_alert', // start/stop/marker
+			76 => 'tank_battery_low', // marker
+			81 => 'tank_pod_connected', // marker - tank pod has connected
+			82 => 'tank_pod_disconnected', // marker - tank pod has lost connectection
+
 		],
 		'event_type' => [
 			'type' => 'enum',
@@ -1155,6 +1193,11 @@ class FITFile
 			143 => 'keiser_fitness',
 			144 => 'zwift_byte',
 			145 => 'porsche_ep',
+			146 => 'blackbird',
+			147 => 'meilan_byte',
+			148 => 'ezon',
+			149 => 'laisi',
+			150 => 'myzone',
 			255 => 'development',
 			257 => 'healthandlife',
 			258 => 'lezyne',
@@ -1222,6 +1265,11 @@ class FITFile
 			320 => 'lsec', // Lishun Electric & Communication
 			321 => 'lululemon_studio',
 			322 => 'shanyue',
+			323 => 'spinning_mda',
+			324 => 'hilldating',
+			325 => 'aero_sensor',
+			326 => 'nike',
+			327 => 'magicshine',
 			5759 => 'actigraphcorp',
 		],
 		'garmin_product' => [
@@ -1402,6 +1450,7 @@ class FITFile
 			2477 => 'fenix3_hr_kor',
 			2496 => 'nautix',
 			2497 => 'vivo_active_hr_apac',
+			2503 => 'fr35',
 			2512 => 'oregon7xx_ww',
 			2530 => 'edge_820',
 			2531 => 'edge_explore_820',
@@ -1476,6 +1525,7 @@ class FITFile
 			3134 => 'fenix5s_plus_apac',
 			3135 => 'fenix5x_plus_apac',
 			3142 => 'edge_520_plus_apac',
+			3143 => 'descent_t1',
 			3144 => 'fr235l_asia',
 			3145 => 'fr245_asia',
 			3163 => 'vivo_active3m_apac',
@@ -1554,6 +1604,7 @@ class FITFile
 			3739 => 'marq_golfer',
 			3740 => 'venu_daimler',
 			3794 => 'fr745_asia',
+			3808 => 'varia_rct715',
 			3809 => 'lily_asia',
 			3812 => 'edge_1030_plus_asia',
 			3813 => 'edge_130_plus_asia',
@@ -1591,6 +1642,8 @@ class FITFile
 			4017 => 'venu2_plus_asia',
 			4024 => 'fr955',
 			4033 => 'fr55_asia',
+			4061 => 'edge_540',
+			4062 => 'edge_840',
 			4063 => 'vivosmart_5',
 			4071 => 'instinct_2_asia',
 			4105 => 'marq_gen2', // Adventurer, Athlete, Captain, Golfer
@@ -1603,6 +1656,11 @@ class FITFile
 			4135 => 'tactix7',
 			4155 => 'instinct_crossover',
 			4169 => 'edge_explore2',
+			4233 => 'approach_s70',
+			4257 => 'fr265_large',
+			4258 => 'fr265_small',
+			4260 => 'venu3',
+			4261 => 'venu3s',
 			4265 => 'tacx_neo_smart', // Neo Smart, Tacx
 			4266 => 'tacx_neo2_smart', // Neo 2 Smart, Tacx
 			4267 => 'tacx_neo2_t_smart', // Neo 2T Smart, Tacx
@@ -1616,7 +1674,19 @@ class FITFile
 			4275 => 'tacx_flux2_smart', // Flux 2 Smart, Tacx
 			4276 => 'tacx_magnum', // Magnum, Tacx
 			4305 => 'edge_1040_asia',
+			4312 => 'epix_gen2_pro_42',
+			4313 => 'epix_gen2_pro_47',
+			4314 => 'epix_gen2_pro_51',
+			4315 => 'fr965',
 			4341 => 'enduro2',
+			4374 => 'fenix7s_pro_solar',
+			4375 => 'fenix7_pro_solar',
+			4376 => 'fenix7x_pro_solar',
+			4394 => 'instinct_2x',
+			4426 => 'vivoactive5',
+			4442 => 'descent_t2',
+			4472 => 'marq_gen2_commander',
+			4556 => 'd2_mach1_pro',
 			10007 => 'sdm4', // SDM4 footpod
 			10014 => 'edge_remote',
 			20533 => 'tacx_training_app_win',
@@ -2103,6 +2173,14 @@ class FITFile
 			6 => 'footpod',
 			7 => 'bike_trainer', // Indoor-Bike FTMS protocol
 		],
+		'ant_channel_id' => [
+			'type' => 'uint32z',
+			0xF0000000 => 'ant_extended_device_number_upper_nibble',
+			0x0F000000 => 'ant_transmission_type_lower_nibble',
+			0x00FF0000 => 'ant_device_type',
+			0x0000FFFF => 'ant_device_number',
+
+		],
 		'display_orientation' => [
 			'type' => 'enum',
 			0 => 'auto', // automatic if the device supports it
@@ -2551,6 +2629,11 @@ class FITFile
 			'type' => 'uint8',
 			0 => 'rest',
 			1 => 'active',
+		],
+		'max_met_category' => [
+			'type' => 'enum',
+			0 => 'generic',
+			1 => 'cycling',
 		],
 		'exercise_category' => [
 			'type' => 'uint16',
@@ -3944,15 +4027,83 @@ class FITFile
 			1 => 'enabled',
 			2 => 'backup_only',
 		],
+		'dive_alert' => [
+			'type' => 'enum',
+			0 => 'ndl_reached',
+			1 => 'gas_switch_prompted',
+			2 => 'near_surface',
+			3 => 'approaching_ndl',
+			4 => 'po2_warn',
+			5 => 'po2_crit_high',
+			6 => 'po2_crit_low',
+			7 => 'time_alert',
+			8 => 'depth_alert',
+			9 => 'deco_ceiling_broken',
+			10 => 'deco_complete',
+			11 => 'safety_stop_broken',
+			12 => 'safety_stop_complete',
+			13 => 'cns_warning',
+			14 => 'cns_critical',
+			15 => 'otu_warning',
+			16 => 'otu_critical',
+			17 => 'ascent_critical',
+			18 => 'alert_dismissed_by_key',
+			19 => 'alert_dismissed_by_timeout',
+			20 => 'battery_low',
+			21 => 'battery_critical',
+			22 => 'safety_stop_started',
+			23 => 'approaching_first_deco_stop',
+			24 => 'setpoint_switch_auto_low',
+			25 => 'setpoint_switch_auto_high',
+			26 => 'setpoint_switch_manual_low',
+			27 => 'setpoint_switch_manual_high',
+			28 => 'auto_setpoint_switch_ignored',
+			29 => 'switched_to_open_circuit',
+			30 => 'switched_to_closed_circuit',
+			32 => 'tank_battery_low',
+			33 => 'po2_ccr_dil_low', // ccr dilent has low po2
+			34 => 'deco_stop_cleared', // a deco stop has been cleared
+			35 => 'apnea_neutral_buoyancy', // Target Depth Apnea Alarm triggered
+			36 => 'apnea_target_depth', // Neutral Buoyance Apnea Alarm triggered
+			37 => 'apnea_surface', // Surface Apnea Alarm triggered
+			38 => 'apnea_high_speed', // High Speed Apnea Alarm triggered
+			39 => 'apnea_low_speed', // Low Speed Apnea Alarm triggered
+		],
 		'dive_alarm_type' => [
 			'type' => 'enum',
 			0 => 'depth', // Alarm when a certain depth is crossed
 			1 => 'time', // Alarm when a certain time has transpired
+			2 => 'speed', // Alarm when a certain ascent or descent rate is exceeded
 		],
 		'dive_backlight_mode' => [
 			'type' => 'enum',
 			0 => 'at_depth',
 			1 => 'always_on',
+		],
+		'sleep_level' => [
+			'type' => 'enum',
+			0 => 'unmeasurable',
+			1 => 'awake',
+			2 => 'light',
+			3 => 'deep',
+			4 => 'rem',
+		],
+		'spo2_measuremen_type' => [
+			'type' => 'enum',
+			0 => 'off_wrist',
+			1 => 'spot_check',
+			2 => 'continuous_check',
+			3 => 'periodic',
+		],
+		'ccr_setpoint_switch_mode' => [
+			'type' => 'enum',
+			0 => 'manual', // User switches setpoints manually
+			1 => 'automatic', // Switch automatically based on depth
+		],
+		'dive_gas_mode' => [
+			'type' => 'enum',
+			0 => 'open_circuit',
+			1 => 'closed_circuit_diluent'
 		],
 		'favero_product' => [
 			'type' => 'uint16',
@@ -3989,6 +4140,12 @@ class FITFile
 			1 => 'start',
 			2 => 'complete',
 		],
+		'gas_consumption_rate_type' => [
+			'type' => 'enum',
+			0 => 'pressure_sac', // Pressure-based Surface Air Consumption
+			1 => 'volume_sac', // Volumetric Surface Air Consumption
+			2 => 'rmv', // Respiratory Minute Volume
+		],
 		'tap_sensitivity' => [
 			'type' => 'enum',
 			0 => 'high',
@@ -4001,7 +4158,32 @@ class FITFile
 			1 => 'threat_none',
 			2 => 'threat_approaching',
 			3 => 'threat_approaching_fast',
-		]
+		],
+		'max_met_speed_source' => [
+			'type' => 'enum',
+			0 => 'onboard_gps',
+			1 => 'connected_gps',
+			2 => 'cadence',
+		],
+		'max_met_heart_rate_source' => [
+			'type' => 'enum',
+			0 => 'whr', // Wrist Heart Rate Monitor
+			1 => 'hrm', // Chest Strap Heart Rate Monitor
+		],
+		'hrv_status' => [
+			'type' => 'enum',
+			0 => 'none',
+			1 => 'poor',
+			2 => 'low',
+			3 => 'unbalanced',
+			4 => 'balanced',
+
+		],
+		'no_fly_time_mode' => [
+			'type' => 'enum',
+			0 => 'standard', // Standard Diver Alert Network no-fly guidance
+			1 => 'flat_24_hours', // Flat 24 hour no-fly guidance
+		],
 	];
 
 	/**
@@ -4070,7 +4252,7 @@ class FITFile
 		143 => 18446744073709551615, // 0xFFFFFFFFFFFFFFFF
 		144 => 0                     // 0x0000000000000000
 	];
-	// VERSION: 21.101
+	// VERSION: 21.126
 	// Automatically extracted from FIT SDK https://developer.garmin.com/fit/download/
 	// Extracted from CSV versions of the Profile Message tab in Profile.xlsx
 	private $data_mesg_info = [
@@ -4373,6 +4555,18 @@ class FITFile
 					0 => ['field_name' => 'heart_rate_antplus_device_type', 'field_type' => 'antplus_device_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => 'antplus', 'ref_field_name' => 'heart_rate_source_type'],
 					1 => ['field_name' => 'heart_rate_local_device_type', 'field_type' => 'local_device_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => 'local', 'ref_field_name' => 'heart_rate_source_type'],
 				],
+				21 => ['field_name' => 'travel_gas', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Index of travel dive_gas message
+				22 => ['field_name' => 'ccr_low_setpoint_switch_mode', 'field_type' => 'ccr_setpoint_switch_mode', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // If low PO2 should be switched to automatically
+				23 => ['field_name' => 'ccr_low_setpoint', 'field_type' => 'uint8', 'scale' => 100, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Target PO2 when using low setpoint
+				24 => ['field_name' => 'ccr_low_setpoint_depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Depth to switch to low setpoint in automatic mode
+				25 => ['field_name' => 'ccr_high_setpoint_switch_mode', 'field_type' => 'ccr_setpoint_switch_mode', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // If high PO2 should be switched to automatically
+				26 => ['field_name' => 'ccr_high_setpoint', 'field_type' => 'uint8', 'scale' => 100, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Target PO2 when using high setpoint
+				27 => ['field_name' => 'ccr_high_setpoint_depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Depth to switch to high setpoint in automatic mode
+				29 => ['field_name' => 'gas_consumption_display', 'field_type' => 'gas_consumption_rate_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Type of gas consumption rate to display. Some values are only valid if tank volume is known.
+				30 => ['field_name' => 'up_key_enabled', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Indicates whether the up key is enabled during dives
+				35 => ['field_name' => 'dive_sounds', 'field_type' => 'tone', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Sounds and vibration enabled or disabled in-dive
+				36 => ['field_name' => 'last_stop_multiple', 'field_type' => 'uint8', 'scale' => 10, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Usually 1.0/1.5/2.0 representing 3/4.5/6m or 10/15/20ft
+				37 => ['field_name' => 'no_fly_time_mode', 'field_type' => 'no_fly_time_mode', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Indicates which guidelines to use for no-fly surface interval.
 			],
 			'dive_alarm' => [
 				254 => ['field_name' => 'message_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Index of the alarm (e.g. )
@@ -4382,6 +4576,27 @@ class FITFile
 				3 => ['field_name' => 'alarm_type', 'field_type' => 'dive_alarm_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Alarm type setting (e.g. )
 				4 => ['field_name' => 'sound', 'field_type' => 'tone', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Tone and Vibe setting for the alarm (e.g. )
 				5 => ['field_name' => 'dive_types', 'field_type' => 'sub_sport', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Dive types the alarm will trigger on (e.g. )
+				6 => ['field_name' => 'id', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Alarm ID
+				7 => ['field_name' => 'popup_enabled', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Show a visible pop-up for this alarm
+				8 => ['field_name' => 'trigger_on_descent', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Trigger the alarm on descent
+				9 => ['field_name' => 'trigger_on_ascent', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Trigger the alarm on ascent
+				10 => ['field_name' => 'repeating', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Repeat alarm each time threshold is crossed?
+				11 => ['field_name' => 'speed', 'field_type' => 'sint32', 'scale' => 1000, 'offset' => 0, 'units' => 'mps', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Ascent/descent rate (mps) setting for speed type alarms
+			],
+			'dive_apnea_alarm' => [
+				254 => ['field_name' => 'message_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Index of the alarm
+				0 => ['field_name' => 'depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Depth setting (m) for depth type alarms (e.g. )
+				1 => ['field_name' => 'time', 'field_type' => 'sint32', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time setting (s) for time type alarms (e.g. )
+				2 => ['field_name' => 'enabled', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Enablement flag (e.g. )
+				3 => ['field_name' => 'alarm_type', 'field_type' => 'dive_alarm_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Alarm type setting (e.g. )
+				4 => ['field_name' => 'sound', 'field_type' => 'tone', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Tone and Vibe setting for the alarm (e.g. )
+				5 => ['field_name' => 'dive_types', 'field_type' => 'sub_sport', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Dive types the alarm will trigger on (e.g. )
+				6 => ['field_name' => 'id', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Alarm ID
+				7 => ['field_name' => 'popup_enabled', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Show a visible pop-up for this alarm
+				8 => ['field_name' => 'trigger_on_descent', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Trigger the alarm on descent
+				9 => ['field_name' => 'trigger_on_ascent', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Trigger the alarm on ascent
+				10 => ['field_name' => 'repeating', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Repeat alarm each time threshold is crossed?
+				11 => ['field_name' => 'speed', 'field_type' => 'sint32', 'scale' => 1000, 'offset' => 0, 'units' => 'mps', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Ascent/descent rate (mps) setting for speed type alarms
 			]
 		],
 		259 => ['mesg_name' => 'dive_gas', 'field_defns' => [
@@ -4389,6 +4604,7 @@ class FITFile
 			0 => ['field_name' => 'helium_content', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			1 => ['field_name' => 'oxygen_content', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			2 => ['field_name' => 'status', 'field_type' => 'dive_gas_status', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			3 => ['field_name' => 'mode', 'field_type' => 'dive_gas_mode', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		]],
 		15 => ['mesg_name' => 'goal', 'field_defns' => [
 			254 => ['field_name' => 'message_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -4465,6 +4681,8 @@ class FITFile
 			35 => ['field_name' => 'training_stress_score', 'field_type' => 'uint16', 'scale' => 10, 'offset' => 0, 'units' => 'tss', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			36 => ['field_name' => 'intensity_factor', 'field_type' => 'uint16', 'scale' => 1000, 'offset' => 0, 'units' => 'if', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			37 => ['field_name' => 'left_right_balance', 'field_type' => 'left_right_balance_100', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			38 => ['field_name' => 'end_position_lat', 'field_type' => 'sint32', 'scale' => 1, 'offset' => 0, 'units' => 'semicircles', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			39 => ['field_name' => 'end_position_long', 'field_type' => 'sint32', 'scale' => 1, 'offset' => 0, 'units' => 'semicircles', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			41 => ['field_name' => 'avg_stroke_count', 'field_type' => 'uint32', 'scale' => 10, 'offset' => 0, 'units' => 'strokes/lap', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			42 => ['field_name' => 'avg_stroke_distance', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			43 => ['field_name' => 'swim_stroke', 'field_type' => 'swim_stroke', 'scale' => 1, 'offset' => 0, 'units' => 'swim_stroke', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -4520,6 +4738,7 @@ class FITFile
 			103 => ['field_name' => 'avg_left_pedal_smoothness', 'field_type' => 'uint8', 'scale' => 2, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			104 => ['field_name' => 'avg_right_pedal_smoothness', 'field_type' => 'uint8', 'scale' => 2, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			105 => ['field_name' => 'avg_combined_pedal_smoothness', 'field_type' => 'uint8', 'scale' => 2, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			110 => ['field_name' => 'sport_profile_name', 'field_type' => 'string', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Sport name from associated sport mesg
 			111 => ['field_name' => 'sport_index', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			112 => ['field_name' => 'time_standing', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Total time spend in the standing position (e.g. )
 			113 => ['field_name' => 'stand_count', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Number of transitions to the standing state (e.g. )
@@ -4546,9 +4765,19 @@ class FITFile
 			134 => ['field_name' => 'avg_step_length', 'field_type' => 'uint16', 'scale' => 10, 'offset' => 0, 'units' => 'mm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			137 => ['field_name' => 'total_anaerobic_training_effect', 'field_type' => 'uint8', 'scale' => 10, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			139 => ['field_name' => 'avg_vam', 'field_type' => 'uint16', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			140 => ['field_name' => 'avg_depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 0 if above water
+			141 => ['field_name' => 'max_depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 0 if above water
+			142 => ['field_name' => 'surface_interval', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time since end of last dive
+			143 => ['field_name' => 'start_cns', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			144 => ['field_name' => 'end_cns', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			145 => ['field_name' => 'start_n2', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			146 => ['field_name' => 'end_n2', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			147 => ['field_name' => 'avg_respiration_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '8', 'accumulate' => '', 'component' => 'enhanced_avg_respiration_rate', 'ref_field_type' => '', 'ref_field_name' => ''],
 			148 => ['field_name' => 'max_respiration_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '8', 'accumulate' => '', 'component' => 'enhanced_max_respiration_rate', 'ref_field_type' => '', 'ref_field_name' => ''],
 			149 => ['field_name' => 'min_respiration_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '8', 'accumulate' => '', 'component' => 'enhanced_min_respiration_rate', 'ref_field_type' => '', 'ref_field_name' => ''],
+			150 => ['field_name' => 'min_temperature', 'field_type' => 'sint8', 'scale' => 1, 'offset' => 0, 'units' => 'C', 'bits' => '8', 'accumulate' => '', 'component' => 'enhanced_min_respiration_rate', 'ref_field_type' => '', 'ref_field_name' => ''],
+			155 => ['field_name' => '02_toxicity', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'OTUs', 'bits' => '8', 'accumulate' => '', 'component' => 'enhanced_min_respiration_rate', 'ref_field_type' => '', 'ref_field_name' => ''],
+			156 => ['field_name' => 'dive_number', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '8', 'accumulate' => '', 'component' => 'enhanced_min_respiration_rate', 'ref_field_type' => '', 'ref_field_name' => ''],
 			168 => ['field_name' => 'training_load_peak', 'field_type' => 'sint32', 'scale' => 65536, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			169 => ['field_name' => 'enhanced_avg_respiration_rate', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'Breaths/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			170 => ['field_name' => 'enhanced_max_respiration_rate', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'Breaths/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -4558,6 +4787,10 @@ class FITFile
 			183 => ['field_name' => 'jump_count', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			186 => ['field_name' => 'avg_grit', 'field_type' => 'float32', 'scale' => 1, 'offset' => 0, 'units' => 'kGrit', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes. (e.g. )
 			187 => ['field_name' => 'avg_flow', 'field_type' => 'float32', 'scale' => 1, 'offset' => 0, 'units' => 'Flow', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals. (e.g. )
+			194 => ['field_name' => 'avg_spo2', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average SPO2 for the monitoring session
+			195 => ['field_name' => 'avg_stress', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average stress for the monitoring session
+			197 => ['field_name' => 'sdrr_hrv', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Standard deviation of R-R interval (SDRR) - Heart rate variability measure most useful for wellness users.
+			198 => ['field_name' => 'rmssd_hrv', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Root mean square successive difference (RMSSD) - Heart rate variability measure most useful for athletes
 			199 => ['field_name' => 'total_fractional_ascent', 'field_type' => 'uint8', 'scale' => 100, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // fractional part of total_ascent (e.g. )
 			200 => ['field_name' => 'total_fractional_descent', 'field_type' => 'uint8', 'scale' => 100, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // fractional part of total_descent (e.g. )
 			208 => ['field_name' => 'avg_core_temperature', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'C', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -4681,6 +4914,9 @@ class FITFile
 			119 => ['field_name' => 'avg_stance_time_balance', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			120 => ['field_name' => 'avg_step_length', 'field_type' => 'uint16', 'scale' => 10, 'offset' => 0, 'units' => 'mm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			121 => ['field_name' => 'avg_vam', 'field_type' => 'uint16', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '16', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			122 => ['field_name' => 'avg_depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 0 if above water
+			123 => ['field_name' => 'max_depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 0 if above water
+			124 => ['field_name' => 'min_temperature', 'field_type' => 'sint8', 'scale' => 1, 'offset' => 0, 'units' => 'c', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			136 => ['field_name' => 'enhanced_avg_respiration_rate', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'Breaths/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			137 => ['field_name' => 'enhanced_max_respiration_rate', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'Breaths/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			147 => ['field_name' => 'avg_respiration_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '8', 'accumulate' => '', 'component' => 'enhanced_avg_respiration_rate', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -4780,6 +5016,7 @@ class FITFile
 			83 => ['field_name' => 'vertical_ratio', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			84 => ['field_name' => 'stance_time_balance', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			85 => ['field_name' => 'step_length', 'field_type' => 'uint16', 'scale' => 10, 'offset' => 0, 'units' => 'mm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			86 => ['field_name' => 'cycle_length16', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Supports larger cycle sizes needed for paddlesports. Max cycle size: 655.35
 			91 => ['field_name' => 'absolute_pressure', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => 'Pa', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Includes atmospheric pressure (e.g. )
 			92 => ['field_name' => 'depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 0 if above water (e.g. )
 			93 => ['field_name' => 'next_stop_depth', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 0 if above water (e.g. )
@@ -4792,10 +5029,17 @@ class FITFile
 			108 => ['field_name' => 'enhanced_respiration_rate', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'Breaths/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			114 => ['field_name' => 'grit', 'field_type' => 'float32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes. (e.g. )
 			115 => ['field_name' => 'flow', 'field_type' => 'float32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals. (e.g. )
+			116 => ['field_name' => 'current_stress', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Current Stress value
 			117 => ['field_name' => 'ebike_travel_range', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'km', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			118 => ['field_name' => 'ebike_battery_level', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			119 => ['field_name' => 'ebike_assist_mode', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'depends on sensor', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			120 => ['field_name' => 'ebike_assist_level_percent', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			123 => ['field_name' => 'air_time_remaining', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			124 => ['field_name' => 'pressure_sac', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'bar/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Pressure-based surface air consumption
+			125 => ['field_name' => 'volume_sac', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'L/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Volumetric surface air consumption
+			126 => ['field_name' => 'rmv', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'L/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Respiratory minute volume
+			127 => ['field_name' => 'ascent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			128 => ['field_name' => 'po2', 'field_type' => 'uint8', 'scale' => 100, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Current partial pressure of oxygen
 			139 => ['field_name' => 'core_temperature', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'C', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		]],
 		21 => ['mesg_name' => 'event', 'field_defns' => [
@@ -4825,7 +5069,9 @@ class FITFile
 				17 => ['field_name' => 'gear_change_data', 'field_type' => 'uint32', 'scale' => '1,1,1,1', 'offset' => 0, 'units' => '', 'bits' => '8,8,8,8', 'accumulate' => '', 'component' => 'rear_gear_num,rear_gear,front_gear_num,front_gear', 'ref_field_type' => 'front_gear_change,rear_gear_change', 'ref_field_name' => 'event,event'],
 				18 => ['field_name' => 'rider_position', 'field_type' => 'rider_position_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => 'rider_position_change', 'ref_field_name' => 'event'], // Indicates the rider position value. (e.g. )
 				19 => ['field_name' => 'comm_timeout', 'field_type' => 'comm_timeout_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => 'comm_timeout', 'ref_field_name' => 'event'],
-				20 => ['field_name' => 'radar_threat_alert', 'field_type' => 'uint32', 'scale' => '1,1,10,10', 'offset' => 0, 'units' => '', 'bits' => '8,8,8,8', 'accumulate' => '', 'component' => 'radar_threat_level_max,radar_threat_count,radar_threat_avg_approach_speed,radar_threat_max_approach_speed', 'ref_field_type' => 'radar_threat_alert', 'ref_field_name' => 'event'], // The first byte is the radar_threat_level_max, the second byte is the radar_threat_count, third bytes is the average approach speed, and the 4th byte is the max approach speed (e.g. )
+				20 => ['field_name' => 'dive_alert', 'field_type' => 'dive_alert', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => 'dive_alert', 'ref_field_name' => 'event'],
+				21 => ['field_name' => 'auto_activity_detect_duration', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => 'auto_activity_detect_duration', 'ref_field_name' => 'event'],
+				22 => ['field_name' => 'radar_threat_alert', 'field_type' => 'uint32', 'scale' => '1,1,10,10', 'offset' => 0, 'units' => '', 'bits' => '8,8,8,8', 'accumulate' => '', 'component' => 'radar_threat_level_max,radar_threat_count,radar_threat_avg_approach_speed,radar_threat_max_approach_speed', 'ref_field_type' => 'radar_threat_alert', 'ref_field_name' => 'event'], // The first byte is the radar_threat_level_max, the second byte is the radar_threat_count, third bytes is the average approach speed, and the 4th byte is the max approach speed (e.g. )
 			],
 			4 => ['field_name' => 'event_group', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			7 => ['field_name' => 'score', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Do not populate directly. Autogenerated by decoder for sport_point subfield components (e.g. 1)
@@ -4835,6 +5081,11 @@ class FITFile
 			11 => ['field_name' => 'rear_gear_num', 'field_type' => 'uint8z', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Do not populate directly. Autogenerated by decoder for gear_change subfield components. Rear gear number. 1 is innermost. (e.g. 1)
 			12 => ['field_name' => 'rear_gear', 'field_type' => 'uint8z', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Do not populate directly. Autogenerated by decoder for gear_change subfield components. Number of rear teeth. (e.g. 1)
 			13 => ['field_name' => 'device_index', 'field_type' => 'device_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			14 => ['field_name' => 'activity_type', 'field_type' => 'activity_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Activity Type associated with an auto_activity_detect event
+			15 => [
+				'field_name' => 'start_timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => '', // Timestamp of when the event started
+				0 => ['field_name' => 'auto_activity_detect_start_timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => 'aut_activity_detect', 'ref_field_name' => 'event'] // Auto activity detect
+			],
 			21 => ['field_name' => 'radar_threat_level_max', 'field_type' => 'radar_threat_level_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Do not populate directly. Autogenerated by decoder for threat_alert subfield components. (e.g. 1)
 			22 => ['field_name' => 'radar_threat_count', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Do not populate directly. Autogenerated by decoder for threat_alert subfield components. (e.g. 1)
 			23 => ['field_name' => 'radar_threat_avg_approach_speed', 'field_type' => 'uint8', 'scale' => 10, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Do not populate directly. Autogenerated by decoder for radar_threat_alert subfield components (e.g. )
@@ -5085,11 +5336,41 @@ class FITFile
 			8 => ['field_name' => 'enhanced_speed', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		]],
 		312 => ['mesg_name' => 'split', 'field_defns' => [
+			254 => ['field_name' => 'message_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			0 => ['field_name' => 'split_type', 'field_type' => 'split_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			1 => ['field_name' => 'total_elapsed_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			2 => ['field_name' => 'total_timer_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			3 => ['field_name' => 'total_distance', 'field_type' => 'uint32', 'scale' => 100, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			4 => ['field_name' => 'avg_speed', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			9 => ['field_name' => 'start_time', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			13 => ['field_name' => 'total_ascent', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			14 => ['field_name' => 'total_descent', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			21 => ['field_name' => 'start_position_lat', 'field_type' => 'sint32', 'scale' => 1, 'offset' => 0, 'units' => 'semicircles', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			22 => ['field_name' => 'start_position_long', 'field_type' => 'sint32', 'scale' => 1, 'offset' => 0, 'units' => 'semicircles', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			23 => ['field_name' => 'end_position_lat', 'field_type' => 'sint32', 'scale' => 1, 'offset' => 0, 'units' => 'semicircles', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			24 => ['field_name' => 'end_position_long', 'field_type' => 'sint32', 'scale' => 1, 'offset' => 0, 'units' => 'semicircles', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			25 => ['field_name' => 'max_speed', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			26 => ['field_name' => 'avg_vert_speed', 'field_type' => 'sint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			27 => ['field_name' => 'end_time', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			28 => ['field_name' => 'total_calories', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => 'kcal', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			74 => ['field_name' => 'start_elevation', 'field_type' => 'uint32', 'scale' => 5, 'offset' => 500, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			110 => ['field_name' => 'total_moving_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		]],
+		313 => ['mesg_name' => 'split_summary', 'field_defns' => [
+			254 => ['field_name' => 'message_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'split_type', 'field_type' => 'split_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			3 => ['field_name' => 'num_splits', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			4 => ['field_name' => 'total_timer_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			5 => ['field_name' => 'total_distance', 'field_type' => 'uint32', 'scale' => 100, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			6 => ['field_name' => 'avg_speed', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			7 => ['field_name' => 'max_speed', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			8 => ['field_name' => 'total_ascent', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			9 => ['field_name' => 'total_descent', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			10 => ['field_name' => 'avg_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			11 => ['field_name' => 'max_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			12 => ['field_name' => 'avg_vert_speed', 'field_type' => 'sint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			13 => ['field_name' => 'total_calories', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => 'kcal', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			77 => ['field_name' => 'total_moving_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		]],
 		317 => ['mesg_name' => 'climb_pro', 'field_defns' => [
 			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -5280,6 +5561,7 @@ class FITFile
 			11 => ['field_name' => 'default_race_leader', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Index for the Leader Board entry selected as the default race participant (e.g. )
 		]],
 		26 => ['mesg_name' => 'workout', 'field_defns' => [
+			254 => ['field_name' => 'message_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			4 => ['field_name' => 'sport', 'field_type' => 'sport', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			5 => ['field_name' => 'capabilities', 'field_type' => 'workout_capabilities', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			6 => ['field_name' => 'num_valid_steps', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // number of valid steps (e.g. 1)
@@ -5418,6 +5700,7 @@ class FITFile
 			10 => ['field_name' => 'metabolic_age', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'years', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			11 => ['field_name' => 'visceral_fat_rating', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			12 => ['field_name' => 'user_profile_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Associates this weight scale message to a user. This corresponds to the index of the user profile message in the weight scale file. (e.g. 1)
+			13 => ['field_name' => 'bmi', 'field_type' => 'uint16', 'scale' => 10, 'offset' => 0, 'units' => 'kg/m^2', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		]],
 		51 => ['mesg_name' => 'blood_pressure', 'field_defns' => [
 			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -5475,6 +5758,17 @@ class FITFile
 			33 => ['field_name' => 'moderate_activity_minutes', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'minutes', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			34 => ['field_name' => 'vigorous_activity_minutes', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'minutes', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		]],
+		211 => ['mesg_name' => 'monitoring_hr_data', 'field_defns' => [
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Must align to logging interval, for example, time must be 00:00:00 for daily log. (e.g. )
+			0 => ['field_name' => 'resting_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 7-day rolling average (e.g. )
+			1 => ['field_name' => 'current_day_resting_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // RHR for today only. (Feeds into 7-day average) (e.g. )
+		]],
+		269 => ['mesg_name' => 'spo2_data', 'field_defns' => [
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'reading_spo2', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'percent', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			1 => ['field_name' => 'reading_confidence', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			2 => ['field_name' => 'mode', 'field_type' => 'spo2_measurement_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Mode when data was captured
+		]],
 		132 => ['mesg_name' => 'hr', 'field_defns' => [
 			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			0 => ['field_name' => 'fractional_timestamp', 'field_type' => 'uint16', 'scale' => 32768, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -5487,6 +5781,16 @@ class FITFile
 			0 => ['field_name' => 'stress_level_value', 'field_type' => 'sint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			1 => ['field_name' => 'stress_level_time', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time stress score was calculated (e.g. )
 		]],
+		229 => ['mesg_name' => 'max_met_data', 'field_defns' => [
+			0 => ['field_name' => 'update_time', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time maxMET and vo2 were calculated (e.g. )
+			2 => ['field_name' => 'vo2_max', 'field_type' => 'uint16', 'scale' => 10, 'offset' => 0, 'units' => 'mL/kg/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			5 => ['field_name' => 'sport', 'field_type' => 'sport', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			6 => ['field_name' => 'sub_sport', 'field_type' => 'sub_sport', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			8 => ['field_name' => 'max_met_category', 'field_type' => 'max_met_category', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			9 => ['field_name' => 'calibrated_data', 'field_type' => 'bool', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Indicates if calibrated data was used in the calculation (e.g )
+			12 => ['field_name' => 'hr_source', 'field_type' => 'max_met_heart_rate_source', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Indicates if the estimate was obtained using a chest strap or wrist heart rate (e.g )
+			13 => ['field_name' => 'speed_source', 'field_type' => 'max_met_speed_source', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Indidcates if the estimate was obtained using onboard GPS or connected GPS (e.g. )
+		]],
 		145 => ['mesg_name' => 'memo_glob', 'field_defns' => [
 			250 => ['field_name' => 'part_index', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Sequence number of memo blocks (e.g. )
 			0 => ['field_name' => 'memo', 'field_type' => 'byte', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Deprecated. Use data field. (e.g. )
@@ -5494,6 +5798,10 @@ class FITFile
 			2 => ['field_name' => 'parent_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Index of mesg that this glob is associated with. (e.g. )
 			3 => ['field_name' => 'field_num', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Field within the parent that this glob is associated with (e.g. )
 			4 => ['field_name' => 'data', 'field_type' => 'uint8z', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Block of utf8 bytes. Note, mutltibyte characters may be split across adjoining memo_glob messages. (e.g. )
+		]],
+		275 => ['mesg_name' => 'sleep_level', 'field_defns' => [
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'sleep_level', 'field_type' => 'sleep_level', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		]],
 		82 => ['mesg_name' => 'ant_channel_id', 'field_defns' => [
 			0 => ['field_name' => 'channel_number', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
@@ -5559,17 +5867,71 @@ class FITFile
 			9 => ['field_name' => 'o2_toxicity', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'OTUs', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			10 => ['field_name' => 'dive_number', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 			11 => ['field_name' => 'bottom_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			12 => ['field_name' => 'avg_pressure_sac', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'bar/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average pressure-based surface air consumption (e.g )
+			13 => ['field_name' => 'avg_volume_sac', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'L/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average volumetric surface air consumption (e.g )
+			14 => ['field_name' => 'avg_rmv', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'L/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average respiratory minute volume (e.g )
+			15 => ['field_name' => 'descent_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time to reach deepest level stop (e.g )
+			16 => ['field_name' => 'ascent_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time after leaving bottom until reaching surface (e.g )
 			17 => ['field_name' => 'avg_ascent_rate', 'field_type' => 'sint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average ascent rate, not including descents or stops (e.g. )
 			22 => ['field_name' => 'avg_descent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average descent rate, not including ascents or stops (e.g. )
 			23 => ['field_name' => 'max_ascent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Maximum ascent rate (e.g. )
 			24 => ['field_name' => 'max_descent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Maximum descent rate (e.g. )
 			25 => ['field_name' => 'hang_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time spent neither ascending nor descending (e.g. )
 		]],
-		78 => [
-			'mesg_name' => 'hrv', 'field_defns' => [
-				0 => ['field_name' => 'time', 'field_type' => 'uint16', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time between beats (e.g. 1)
-			]
-		]
+		78 => ['mesg_name' => 'hrv', 'field_defns' => [
+			0 => ['field_name' => 'time', 'field_type' => 'uint16', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time between beats (e.g. 1)
+		]],
+		290 => ['mesg_name' => 'beat_intervals', 'field_defns' => [ // Array of heart beat intervals
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'timestamp_ms', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Milliseconds past date_time (e.g. )
+			1 => ['field_name' => 'time', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Array of millisecond times between beats (e.g. )
+		]],
+		370 => ['mesg_name' => 'hrv_status_summary', 'field_defns' => [
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'weekly_average', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 7 day RMSSD average over sleep (e.g. )
+			1 => ['field_name' => 'last_nigh_average', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Last night RMSSD average over sleep (e.g. )
+			2 => ['field_name' => 'last_night_5_min_high', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 5 minute high RMSSD value over sleep (e.g. )
+			3 => ['field_name' => 'baseline_low_upper', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 3 week baseline, upper boundary of low HRV status (e.g. )
+			4 => ['field_name' => 'baseline_balanced_lower', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 3 week baseline, lower boundary of balanced HRV status (e.g. )
+			5 => ['field_name' => 'baseline_balanced_upper', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 3 week baseline, upper boundary of balanced HRV status (e.g. )
+			6 => ['field_name' => 'status', 'field_type' => 'hrv_status', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		]],
+		371 => ['mesg_name' => 'hrv_value', 'field_defns' => [
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'value', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 5 minute RMSSD (e.g. )
+		]],
+		297 => ['mesg_name' => 'respiration_rate', 'field_defns' => [
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'respiration_rate', 'field_type' => 'sint16', 'scale' => 100, 'offset' => 0, 'units' => 'breaths/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Breaths * 100 /min, -300 indicates invalid, -200 indicates large motion, -100 indicates off wrist (e.g. )
+		]],
+		319 => ['mesg_name' => 'tank_update', 'field_defns' => [
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'sensor', 'field_type' => 'ant_channel_id', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			1 => ['field_name' => 'pressure', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'bar', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		]],
+		323 => ['mesg_name' => 'tank_summary', 'field_defns' => [
+			253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			0 => ['field_name' => 'sensor', 'field_type' => 'ant_channel_id', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			1 => ['field_name' => 'start_pressure', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'bar', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			2 => ['field_name' => 'end_pressure', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'bar', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+			3 => ['field_name' => 'volume_used', 'field_type' => 'uint32', 'scale' => 100, 'offset' => 0, 'units' => 'L', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		]],
+		346 => ['mesg_name' => 'sleep_assessment', 'field_defns' => [
+			0 => ['field_name' => 'combined_awake_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average of awake_time_score and awakenings_count_score. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			1 => ['field_name' => 'awake_time_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the total time spent awake between sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			2 => ['field_name' => 'awakenings_count_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the number of awakenings that interrupt sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			3 => ['field_name' => 'deep_sleep_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the amount of deep sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			4 => ['field_name' => 'sleep_duration_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the quality of sleep based on sleep stages, heart-rate variability and possible awakenings during the night. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			5 => ['field_name' => 'light_sleep_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the amount of light sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			6 => ['field_name' => 'overall_sleep_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Total score that summarizes the overall quality of sleep, combining sleep duration and quality. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			7 => ['field_name' => 'sleep_quality_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the quality of sleep based on sleep stages, heart-rate variability and possible awakenings during the night. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			8 => ['field_name' => 'sleep_recovery_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates stress and recovery during sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			9 => ['field_name' => 'rem_sleep_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the amount of REM sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			10 => ['field_name' => 'sleep_restlessness_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the amount of restlessness during sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			11 => ['field_name' => 'awakenings_count', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // The number of awakenings during sleep. (e.g )
+			14 => ['field_name' => 'interruptions_score', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Score that evaluates the sleep interruptions. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID. (e.g )
+			15 => ['field_name' => 'average_stress_during_sleep', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Excludes stress during awake periods in the sleep window (e.g )
+		]],
 	];
 
 	// PHP Constructor - called when an object of the class is instantiated.
@@ -6030,7 +6392,6 @@ class FITFile
 				}
 			}
 		}
-
 
 		// Find messages that have been unpacked as unsigned integers that should be signed integers.
 		// http://php.net/manual/en/function.pack.php - signed integers endianness is always machine dependent.

@@ -1,10 +1,10 @@
-Message Name,Field Def #,Field Name,Field Type,Array,Components,Scale,Offset,Units,Bits,Accumulate,Ref Field Name,Ref Field Value,Comment,Products:,EXAMPLE
+﻿Message Name,Field Def #,Field Name,Field Type,Array,Components,Scale,Offset,Units,Bits,Accumulate,Ref Field Name,Ref Field Value,Comment,Products:,EXAMPLE
 file_id,,,,,,,,,,,,,Must be first message in file.,,
 ,0,type,file,,,,,,,,,,,,1
 ,1,manufacturer,manufacturer,,,,,,,,,,,,1
 ,2,product,uint16,,,,,,,,,,,,1
 ,,favero_product,favero_product,,,,,,,,manufacturer,favero_electronics,,,
-,,garmin_product,garmin_product,,,,,,,,"manufacturer,manufacturer,manufacturer,manufacturer","garmin,dynastream,dynastream_oem,tacx",,,1
+,,garmin_product,garmin_product,,,,,,,,manufacturer,manufacturer,manufacturer,manufacturer,garmin,dynastream,dynastream_oem,tacx,,,1
 ,3,serial_number,uint32z,,,,,,,,,,,,1
 ,4,time_created,date_time,,,,,,,,,,Only set for files that are can be created/erased.,,1
 ,5,number,uint16,,,,,,,,,,Only set for files that are not created/erased.,,1
@@ -29,7 +29,7 @@ slave_device,,,,,,,,,,,,,,,
 ,0,manufacturer,manufacturer,,,,,,,,,,,,1
 ,1,product,uint16,,,,,,,,,,,,1
 ,,favero_product,favero_product,,,,,,,,manufacturer,favero_electronics,,,
-,,garmin_product,garmin_product,,,,,,,,"manufacturer,manufacturer,manufacturer,manufacturer","garmin,dynastream,dynastream_oem,tacx",,,1
+,,garmin_product,garmin_product,,,,,,,,manufacturer,manufacturer,manufacturer,manufacturer,garmin,dynastream,dynastream_oem,tacx,,,1
 capabilities,,,,,,,,,,,,,,,
 ,0,languages,uint8z,[N],,,,,,,,,Use language_bits_x types where x is index of array.,,4
 ,1,sports,sport_bits_0,[N],,,,,,,,,Use sport_bits_x types where x is index of array.,,1
@@ -85,7 +85,7 @@ device_settings,,,,,,,,,,,,,,,
 ,174,tap_sensitivity,tap_sensitivity,,,,,,,,,,Used to hold the tap threshold setting,,1
 user_profile,,,,,,,,,,,,,,,
 ,254,message_index,message_index,,,,,,,,,,,,1
-,0,friendly_name,string,,,,,,,,,,,,16
+,0,friendly_name,string,,,,,,,,,,Used for Morning Report greeting,,16
 ,1,gender,gender,,,,,,,,,,,,1
 ,2,age,uint8,,,,,years,,,,,,,1
 ,3,height,uint8,,,100,,m,,,,,,,1
@@ -235,13 +235,14 @@ met_zone,,,,,,,,,,,,,,,
 ,2,calories,uint16,,,10,,kcal / min,,,,,,,1
 ,3,fat_calories,uint8,,,10,,kcal / min,,,,,,,1
 dive_settings,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,,,,,,,,
 ,254,message_index,message_index,,,,,,,,,,,,
 ,0,name,string,,,,,,,,,,,,16
 ,1,model,tissue_model_type,,,,,,,,,,,,
 ,2,gf_low,uint8,,,,,percent,,,,,,,
 ,3,gf_high,uint8,,,,,percent,,,,,,,
 ,4,water_type,water_type,,,,,,,,,,,,
-,5,water_density,float32,,,,,kg/m^3,,,,,Fresh water is usually 1000; salt water is usually 1025,,
+,5,water_density,float32,,,,,kg/m^3,,,,,"Fresh water is usually 1000, salt water is usually 1025",,
 ,6,po2_warn,uint8,,,100,,percent,,,,,Typically 1.40,,
 ,7,po2_critical,uint8,,,100,,percent,,,,,Typically 1.60,,
 ,8,po2_deco,uint8,,,100,,percent,,,,,,,
@@ -259,6 +260,18 @@ dive_settings,,,,,,,,,,,,,,,
 ,20,heart_rate_source,uint8,,,,,,,,,,,,1
 ,,heart_rate_antplus_device_type,antplus_device_type,,,,,,,,heart_rate_source_type,antplus,,,1
 ,,heart_rate_local_device_type,local_device_type,,,,,,,,heart_rate_source_type,local,,,1
+,21,travel_gas,message_index,,,,,,,,,,Index of travel dive_gas message,,
+,22,ccr_low_setpoint_switch_mode,ccr_setpoint_switch_mode,,,,,,,,,,If low PO2 should be switched to automatically,,
+,23,ccr_low_setpoint,uint8,,,100,,percent,,,,,Target PO2 when using low setpoint,,
+,24,ccr_low_setpoint_depth,uint32,,,1000,,m,,,,,Depth to switch to low setpoint in automatic mode,,
+,25,ccr_high_setpoint_switch_mode,ccr_setpoint_switch_mode,,,,,,,,,,If high PO2 should be switched to automatically,,
+,26,ccr_high_setpoint,uint8,,,100,,percent,,,,,Target PO2 when using high setpoint,,
+,27,ccr_high_setpoint_depth,uint32,,,1000,,m,,,,,Depth to switch to high setpoint in automatic mode,,
+,29,gas_consumption_display,gas_consumption_rate_type,,,,,,,,,,Type of gas consumption rate to display. Some values are only valid if tank volume is known.,,
+,30,up_key_enabled,bool,,,,,,,,,,Indicates whether the up key is enabled during dives,,
+,35,dive_sounds,tone,,,,,,,,,,Sounds and vibration enabled or disabled in-dive,,
+,36,last_stop_multiple,uint8,,,10,,,,,,,Usually 1.0/1.5/2.0 representing 3/4.5/6m or 10/15/20ft,,
+,37,no_fly_time_mode,no_fly_time_mode,,,,,,,,,,Indicates which guidelines to use for no-fly surface interval.,,
 dive_alarm,,,,,,,,,,,,,,,
 ,254,message_index,message_index,,,,,,,,,,Index of the alarm,,
 ,0,depth,uint32,,,1000,,m,,,,,Depth setting (m) for depth type alarms,,
@@ -267,11 +280,32 @@ dive_alarm,,,,,,,,,,,,,,,
 ,3,alarm_type,dive_alarm_type,,,,,,,,,,Alarm type setting,,
 ,4,sound,tone,,,,,,,,,,Tone and Vibe setting for the alarm,,
 ,5,dive_types,sub_sport,[N],,,,,,,,,Dive types the alarm will trigger on,,
+,6,id,uint32,,,,,,,,,,Alarm ID,,
+,7,popup_enabled,bool,,,,,,,,,,Show a visible pop-up for this alarm,,
+,8,trigger_on_descent,bool,,,,,,,,,,Trigger the alarm on descent,,
+,9,trigger_on_ascent,bool,,,,,,,,,,Trigger the alarm on ascent,,
+,10,repeating,bool,,,,,,,,,,Repeat alarm each time threshold is crossed?,,
+,11,speed,sint32,,,1000,,mps,,,,,Ascent/descent rate (mps) setting for speed type alarms,,
+dive_apnea_alarm,,,,,,,,,,,,,,,
+,254,message_index,message_index,,,,,,,,,,Index of the alarm,,
+,0,depth,uint32,,,1000,,m,,,,,Depth setting (m) for depth type alarms,,
+,1,time,sint32,,,1,,s,,,,,Time setting (s) for time type alarms,,
+,2,enabled,bool,,,,,,,,,,Enablement flag,,
+,3,alarm_type,dive_alarm_type,,,,,,,,,,Alarm type setting,,
+,4,sound,tone,,,,,,,,,,Tone and Vibe setting for the alarm.,,
+,5,dive_types,sub_sport,[N],,,,,,,,,Dive types the alarm will trigger on,,
+,6,id,uint32,,,,,,,,,,Alarm ID,,
+,7,popup_enabled,bool,,,,,,,,,,Show a visible pop-up for this alarm,,
+,8,trigger_on_descent,bool,,,,,,,,,,Trigger the alarm on descent,,
+,9,trigger_on_ascent,bool,,,,,,,,,,Trigger the alarm on ascent,,
+,10,repeating,bool,,,,,,,,,,Repeat alarm each time threshold is crossed?,,
+,11,speed,sint32,,,1000,,mps,,,,,Ascent/descent rate (mps) setting for speed type alarms,,
 dive_gas,,,,,,,,,,,,,,,
 ,254,message_index,message_index,,,,,,,,,,,,
 ,0,helium_content,uint8,,,,,percent,,,,,,,
 ,1,oxygen_content,uint8,,,,,percent,,,,,,,
 ,2,status,dive_gas_status,,,,,,,,,,,,
+,3,mode,dive_gas_mode,,,,,,,,,,,,
 ,,,GOALS FILE MESSAGES,,,,,,,,,,,,
 goal,,,,,,,,,,,,,,,
 ,254,message_index,message_index,,,,,,,,,,,,1
@@ -295,7 +329,7 @@ activity,,,,,,,,,,,,,,,
 ,2,type,activity,,,,,,,,,,,,1
 ,3,event,event,,,,,,,,,,,,1
 ,4,event_type,event_type,,,,,,,,,,,,1
-,5,local_timestamp,local_date_time,,,,,,,,,,"timestamp epoch expressed in local time, used to convert activity timestamps to local time",,1
+,5,local_timestamp,local_date_time,,,,,,,,,,timestamp epoch expressed in local time, used to convert activity timestamps to local time,,1
 ,6,event_group,uint8,,,,,,,,,,,,1
 session,,,,,,,,,,,,,,,
 ,254,message_index,message_index,,,,,,,,,,Selected bit is set for the current session.,,1
@@ -311,8 +345,8 @@ session,,,,,,,,,,,,,,,
 ,8,total_timer_time,uint32,,,1000,,s,,,,,Timer Time (excludes pauses),,1
 ,9,total_distance,uint32,,,100,,m,,,,,,,1
 ,10,total_cycles,uint32,,,,,cycles,,,,,,,1
-,,total_strides,uint32,,,,,strides,,,"sport,sport","running,walking",,,1
-,,total_strokes,uint32,,,,,strokes,,,"sport,sport,sport,sport","cycling,swimming,rowing,stand_up_paddleboarding",,,1
+,,total_strides,uint32,,,,,strides,,,sport,sport,running,walking,,,1
+,,total_strokes,uint32,,,,,strokes,,,sport,sport,sport,sport,cycling,swimming,rowing,stand_up_paddleboarding,,,1
 ,11,total_calories,uint16,,,,,kcal,,,,,,,1
 ,13,total_fat_calories,uint16,,,,,kcal,,,,,,,1
 ,14,avg_speed,uint16,,enhanced_avg_speed,1000,,m/s,16,,,,total_distance / total_timer_time,,1
@@ -341,6 +375,8 @@ session,,,,,,,,,,,,,,,
 ,35,training_stress_score,uint16,,,10,,tss,,,,,,,1
 ,36,intensity_factor,uint16,,,1000,,if,,,,,,,1
 ,37,left_right_balance,left_right_balance_100,,,,,,,,,,,,1
+,38,end_position_lat,sint32,,,,,semicircles,,,,,,,1
+,39,end_position_long,sint32,,,,,semicircles,,,,,,,1
 ,41,avg_stroke_count,uint32,,,10,,strokes/lap,,,,,,,1
 ,42,avg_stroke_distance,uint16,,,100,,m,,,,,,,1
 ,43,swim_stroke,swim_stroke,,,,,swim_stroke,,,,,,,1
@@ -396,6 +432,7 @@ session,,,,,,,,,,,,,,,
 ,103,avg_left_pedal_smoothness,uint8,,,2,,percent,,,,,,,
 ,104,avg_right_pedal_smoothness,uint8,,,2,,percent,,,,,,,
 ,105,avg_combined_pedal_smoothness,uint8,,,2,,percent,,,,,,,
+,110,sport_profile_name,string,,,,,,,,,,Sport name from associated sport mesg,,16
 ,111,sport_index,uint8,,,,,,,,,,,,1
 ,112,time_standing,uint32,,,1000,,s,,,,,Total time spend in the standing position,,
 ,113,stand_count,uint16,,,,,,,,,,Number of transitions to the standing state,,
@@ -422,9 +459,19 @@ session,,,,,,,,,,,,,,,
 ,134,avg_step_length,uint16,,,10,,mm,,,,,,,
 ,137,total_anaerobic_training_effect,uint8,,,10,,,,,,,,,1
 ,139,avg_vam,uint16,,,1000,,m/s,16,,,,,,1
+,140,avg_depth,uint32,,,1000,,m,,,,,0 if above water,,
+,141,max_depth,uint32,,,1000,,m,,,,,0 if above water,,
+,142,surface_interval,uint32,,,1,,s,,,,,Time since end of last dive,,
+,143,start_cns,uint8,,,1,,percent,,,,,,,
+,144,end_cns,uint8,,,1,,percent,,,,,,,
+,145,start_n2,uint16,,,1,,percent,,,,,,,
+,146,end_n2,uint16,,,1,,percent,,,,,,,
 ,147,avg_respiration_rate,uint8,,enhanced_avg_respiration_rate,,,,8,,,,,,
 ,148,max_respiration_rate,uint8,,enhanced_max_respiration_rate,,,,8,,,,,,
 ,149,min_respiration_rate,uint8,,enhanced_min_respiration_rate,,,,8,,,,,,
+,150,min_temperature,sint8,,,,,C,,,,,,,1
+,155,o2_toxicity,uint16,,,,,OTUs,,,,,,,
+,156,dive_number,uint32,,,,,,,,,,,,
 ,168,training_load_peak,sint32,,,65536,,,,,,,,,
 ,169,enhanced_avg_respiration_rate,uint16,,,100,,Breaths/min,,,,,,,
 ,170,enhanced_max_respiration_rate,uint16,,,100,,Breaths/min,,,,,,,
@@ -434,6 +481,10 @@ session,,,,,,,,,,,,,,,
 ,183,jump_count,uint16,,,,,,,,,,,,
 ,186,avg_grit,float32,,,,,kGrit,,,,,The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.,,
 ,187,avg_flow,float32,,,,,Flow,,,,,The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.,,
+,194,avg_spo2,uint8,,,,,percent,,,,,Average SPO2 for the monitoring session,,
+,195,avg_stress,uint8,,,,,percent,,,,,Average stress for the monitoring session,,
+,197,sdrr_hrv,uint8,,,,,mS,,,,,Standard deviation of R-R interval (SDRR) - Heart rate variability measure most useful for wellness users.,,
+,198,rmssd_hrv,uint8,,,,,mS,,,,,Root mean square successive difference (RMSSD) - Heart rate variability measure most useful for athletes,,
 ,199,total_fractional_ascent,uint8,,,100,,m,,,,,fractional part of total_ascent,,
 ,200,total_fractional_descent,uint8,,,100,,m,,,,,fractional part of total_descent,,
 ,208,avg_core_temperature,uint16,,,100,,C,,,,,,,
@@ -453,8 +504,8 @@ lap,,,,,,,,,,,,,,,
 ,8,total_timer_time,uint32,,,1000,,s,,,,,Timer Time (excludes pauses),,1
 ,9,total_distance,uint32,,,100,,m,,,,,,,1
 ,10,total_cycles,uint32,,,,,cycles,,,,,,,1
-,,total_strides,uint32,,,,,strides,,,"sport,sport","running,walking",,,1
-,,total_strokes,uint32,,,,,strokes,,,"sport,sport,sport,sport","cycling,swimming,rowing,stand_up_paddleboarding",,,1
+,,total_strides,uint32,,,,,strides,,,sport,sport,running,walking,,,1
+,,total_strokes,uint32,,,,,strokes,,,sport,sport,sport,sport,cycling,swimming,rowing,stand_up_paddleboarding,,,1
 ,11,total_calories,uint16,,,,,kcal,,,,,,,1
 ,12,total_fat_calories,uint16,,,,,kcal,,,,,If New Leaf,,1
 ,13,avg_speed,uint16,,enhanced_avg_speed,1000,,m/s,16,,,,,,1
@@ -550,6 +601,9 @@ lap,,,,,,,,,,,,,,,
 ,119,avg_stance_time_balance,uint16,,,100,,percent,,,,,,,
 ,120,avg_step_length,uint16,,,10,,mm,,,,,,,
 ,121,avg_vam,uint16,,,1000,,m/s,16,,,,,,1
+,122,avg_depth,uint32,,,1000,,m,,,,,0 if above water,,
+,123,max_depth,uint32,,,1000,,m,,,,,0 if above water,,
+,124,min_temperature,sint8,,,,,C,,,,,,,1
 ,136,enhanced_avg_respiration_rate,uint16,,,100,,Breaths/min,,,,,,,
 ,137,enhanced_max_respiration_rate,uint16,,,100,,Breaths/min,,,,,,,
 ,147,avg_respiration_rate,uint8,,enhanced_avg_respiration_rate,,,,8,,,,,,
@@ -597,7 +651,7 @@ record,,,,,,,,,,,,,,,
 ,5,distance,uint32,,,100,,m,,,,,,,1
 ,6,speed,uint16,,enhanced_speed,1000,,m/s,16,,,,,,1
 ,7,power,uint16,,,,,watts,,,,,,,1
-,8,compressed_speed_distance,byte,[3],"speed,distance","100,16",,"m/s,m","12,12","0,1",,,,,1
+,8,compressed_speed_distance,byte,[3],speed,distance,100,16,,m/s,m,12,12,0,1,,,,,1
 ,9,grade,sint16,,,100,,%,,,,,,,1
 ,10,resistance,uint8,,,,,,,,,,Relative. 0 is none 254 is Max.,,1
 ,11,time_from_course,sint32,,,1000,,s,,,,,,,1
@@ -647,6 +701,7 @@ record,,,,,,,,,,,,,,,
 ,83,vertical_ratio,uint16,,,100,,percent,,,,,,,
 ,84,stance_time_balance,uint16,,,100,,percent,,,,,,,
 ,85,step_length,uint16,,,10,,mm,,,,,,,
+,87,cycle_length16,uint16,,,100,,m,,,,,Supports larger cycle sizes needed for paddlesports. Max cycle size: 655.35,,
 ,91,absolute_pressure,uint32,,,,,Pa,,,,,Includes atmospheric pressure,,
 ,92,depth,uint32,,,1000,,m,,,,,0 if above water,,
 ,93,next_stop_depth,uint32,,,1000,,m,,,,,0 if above water,,
@@ -659,10 +714,17 @@ record,,,,,,,,,,,,,,,
 ,108,enhanced_respiration_rate,uint16,,,100,,Breaths/min,,,,,,,
 ,114,grit,float32,,,,,,,,,,The grit score estimates how challenging a route could be for a cyclist in terms of time spent going over sharp turns or large grade slopes.,,
 ,115,flow,float32,,,,,,,,,,The flow score estimates how long distance wise a cyclist deaccelerates over intervals where deacceleration is unnecessary such as smooth turns or small grade angle intervals.,,
+,116,current_stress,uint16,,,100,,,,,,,Current Stress value,,
 ,117,ebike_travel_range,uint16,,,,,km,,,,,,,
 ,118,ebike_battery_level,uint8,,,,,percent,,,,,,,
 ,119,ebike_assist_mode,uint8,,,,,depends on sensor,,,,,,,
 ,120,ebike_assist_level_percent,uint8,,,,,percent,,,,,,,
+,123,air_time_remaining,uint32,,,,,s,,,,,,,
+,124,pressure_sac,uint16,,,100,,bar/min,,,,,Pressure-based surface air consumption,,
+,125,volume_sac,uint16,,,100,,L/min,,,,,Volumetric surface air consumption,,
+,126,rmv,uint16,,,100,,L/min,,,,,Respiratory minute volume,,
+,127,ascent_rate,sint32,,,1000,,m/s,,,,,,,
+,129,po2,uint8,,,100,,percent,,,,,Current partial pressure of oxygen,,
 ,139,core_temperature,uint16,,,100,,C,,,,,,,
 event,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,,,1
@@ -686,11 +748,13 @@ event,,,,,,,,,,,,,,,
 ,,distance_duration_alert,uint32,,,100,,m,,,event,distance_duration_alert,,,1
 ,,calorie_duration_alert,uint32,,,,,calories,,,event,calorie_duration_alert,,,1
 ,,fitness_equipment_state,fitness_equipment_state,,,,,,,,event,fitness_equipment,,,1
-,,sport_point,uint32,,"score,opponent_score","1,1",,,"16,16",,event,sport_point,,,1
-,,gear_change_data,uint32,,"rear_gear_num,rear_gear,front_gear_num,front_gear","1,1,1,1",,,"8,8,8,8",,"event,event","front_gear_change,rear_gear_change",,,1
+,,sport_point,uint32,,score,opponent_score,1,1,,,16,16,,event,sport_point,,,1
+,,gear_change_data,uint32,,rear_gear_num,rear_gear,front_gear_num,front_gear,1,1,1,1,,,8,8,8,8,,event,event,front_gear_change,rear_gear_change,,,1
 ,,rider_position,rider_position_type,,,,,,,,event,rider_position_change,Indicates the rider position value.,,
 ,,comm_timeout,comm_timeout_type,,,,,,,,event,comm_timeout,,,
-,,radar_threat_alert,uint32,,"radar_threat_level_max,radar_threat_count,radar_threat_avg_approach_speed,radar_threat_max_approach_speed","1,1,10,10",,,"8,8,8,8",,event,radar_threat_alert,"The first byte is the radar_threat_level_max, the second byte is the radar_threat_count, third bytes is the average approach speed, and the 4th byte is the max approach speed",,
+,,dive_alert,dive_alert,,,,,,,,event,dive_alert,,,
+,,auto_activity_detect_duration,uint16,,,,,min,,,event,auto_activity_detect,,,
+,,radar_threat_alert,uint32,,radar_threat_level_max,radar_threat_count,radar_threat_avg_approach_speed,radar_threat_max_approach_speed,1,1,10,10,,,8,8,8,8,,event,radar_threat_alert,The first byte is the radar_threat_level_max, the second byte is the radar_threat_count, third bytes is the average approach speed, and the 4th byte is the max approach speed,,
 ,4,event_group,uint8,,,,,,,,,,,,1
 ,7,score,uint16,,,,,,,,,,Do not populate directly. Autogenerated by decoder for sport_point subfield components,,1
 ,8,opponent_score,uint16,,,,,,,,,,Do not populate directly. Autogenerated by decoder for sport_point subfield components,,1
@@ -699,6 +763,9 @@ event,,,,,,,,,,,,,,,
 ,11,rear_gear_num,uint8z,,,,,,,,,,Do not populate directly. Autogenerated by decoder for gear_change subfield components. Rear gear number. 1 is innermost.,,1
 ,12,rear_gear,uint8z,,,,,,,,,,Do not populate directly. Autogenerated by decoder for gear_change subfield components. Number of rear teeth.,,1
 ,13,device_index,device_index,,,,,,,,,,,,
+,14,activity_type,activity_type,,,,,,,,,,Activity Type associated with an auto_activity_detect event,,
+,15,start_timestamp,date_time,,,,,s,,,,,Timestamp of when the event started,,
+,,auto_activity_detect_start_timestamp,date_time,,,,,s,,,event,auto_activity_detect,Auto Activity Detect Start Timestamp.,,
 ,21,radar_threat_level_max,radar_threat_level_type,,,,,,,,,,Do not populate directly. Autogenerated by decoder for threat_alert subfield components.,,1
 ,22,radar_threat_count,uint8,,,,,,,,,,Do not populate directly. Autogenerated by decoder for threat_alert subfield components.,,1
 ,23,radar_threat_avg_approach_speed,uint8,,,10,,m/s,,,,,Do not populate directly. Autogenerated by decoder for radar_threat_alert subfield components,,
@@ -715,7 +782,7 @@ device_info,,,,,,,,,,,,,,,
 ,3,serial_number,uint32z,,,,,,,,,,,,1
 ,4,product,uint16,,,,,,,,,,,,1
 ,,favero_product,favero_product,,,,,,,,manufacturer,favero_electronics,,,
-,,garmin_product,garmin_product,,,,,,,,"manufacturer,manufacturer,manufacturer,manufacturer","garmin,dynastream,dynastream_oem,tacx",,,1
+,,garmin_product,garmin_product,,,,,,,,manufacturer,manufacturer,manufacturer,manufacturer,garmin,dynastream,dynastream_oem,tacx,,,1
 ,5,software_version,uint16,,,100,,,,,,,,,1
 ,6,hardware_version,uint8,,,,,,,,,,,,1
 ,7,cum_operating_time,uint32,,,,,s,,,,,Reset by new battery or charge.,,1
@@ -741,11 +808,11 @@ training_file,,,,,,,,,,,,,Corresponds to file_id of workout or course.,,
 ,1,manufacturer,manufacturer,,,,,,,,,,,,1
 ,2,product,uint16,,,,,,,,,,,,1
 ,,favero_product,favero_product,,,,,,,,manufacturer,favero_electronics,,,
-,,garmin_product,garmin_product,,,,,,,,"manufacturer,manufacturer,manufacturer,manufacturer","garmin,dynastream,dynastream_oem,tacx",,,1
+,,garmin_product,garmin_product,,,,,,,,manufacturer,manufacturer,manufacturer,manufacturer,garmin,dynastream,dynastream_oem,tacx,,,1
 ,3,serial_number,uint32z,,,,,,,,,,,,1
 ,4,time_created,date_time,,,,,,,,,,,,1
 weather_conditions,,,,,,,,,,,,,,,
-,253,timestamp,date_time,,,,,,,,,,"time of update for current conditions, else forecast time",,1
+,253,timestamp,date_time,,,,,,,,,,time of update for current conditions, else forecast time,,1
 ,0,weather_report,weather_report,,,,,,,,,,Current or forecast,,1
 ,1,temperature,sint8,,,,,C,,,,,,,1
 ,2,condition,weather_status,,,,,,,,,,Corresponds to GSC Response weatherIcon field,,1
@@ -763,11 +830,11 @@ weather_conditions,,,,,,,,,,,,,,,
 ,14,low_temperature,sint8,,,,,C,,,,,,,1
 weather_alert,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,,,,,,,,1
-,0,report_id,string,,,,,,,,,,"Unique identifier from GCS report ID string, length is 12",,12
+,0,report_id,string,,,,,,,,,,Unique identifier from GCS report ID string, length is 12,,12
 ,1,issue_time,date_time,,,,,,,,,,Time alert was issued,,1
 ,2,expire_time,date_time,,,,,,,,,,Time alert expires,,1
-,3,severity,weather_severity,,,,,,,,,,"Warning, Watch, Advisory, Statement",,1
-,4,type,weather_severe_type,,,,,,,,,,"Tornado, Severe Thunderstorm, etc.",,1
+,3,severity,weather_severity,,,,,,,,,,Warning, Watch, Advisory, Statement,,1
+,4,type,weather_severe_type,,,,,,,,,,Tornado, Severe Thunderstorm, etc.,,1
 gps_metadata,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,Whole second part of the timestamp.,,
 ,0,timestamp_ms,uint16,,,,,ms,,,,,Millisecond part of the timestamp.,,
@@ -825,17 +892,17 @@ barometer_data,,,,,,,,,,,,,,,
 three_d_sensor_calibration,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,Whole second part of the timestamp,,
 ,0,sensor_type,sensor_type,,,,,,,,,,Indicates which sensor the calibration is for,,
-,1,calibration_factor,uint32,,,,,,,,,,"Calibration factor used to convert from raw ADC value to degrees, g, etc.",,
+,1,calibration_factor,uint32,,,,,,,,,,Calibration factor used to convert from raw ADC value to degrees, g, etc.,,
 ,,accel_cal_factor,uint32,,,,,g,,,sensor_type,accelerometer,Accelerometer calibration factor,,
 ,,gyro_cal_factor,uint32,,,,,deg/s,,,sensor_type,gyroscope,Gyro calibration factor,,
 ,2,calibration_divisor,uint32,,,,,counts,,,,,Calibration factor divisor,,
 ,3,level_shift,uint32,,,,,,,,,,Level shift value used to shift the ADC value back into range,,
-,4,offset_cal,sint32,[3],,,,,,,,,"Internal calibration factors, one for each: xy, yx, zx",,
+,4,offset_cal,sint32,[3],,,,,,,,,Internal calibration factors, one for each: xy, yx, zx,,
 ,5,orientation_matrix,sint32,[9],,65535,,,,,,,3 x 3 rotation matrix (row major),,
 one_d_sensor_calibration,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,Whole second part of the timestamp,,
 ,0,sensor_type,sensor_type,,,,,,,,,,Indicates which sensor the calibration is for,,
-,1,calibration_factor,uint32,,,,,,,,,,"Calibration factor used to convert from raw ADC value to degrees, g, etc.",,
+,1,calibration_factor,uint32,,,,,,,,,,Calibration factor used to convert from raw ADC value to degrees, g, etc.,,
 ,,baro_cal_factor,uint32,,,,,Pa,,,sensor_type,barometer,Barometer calibration factor,,
 ,2,calibration_divisor,uint32,,,,,counts,,,,,Calibration factor divisor,,
 ,3,level_shift,uint32,,,,,,,,,,Level shift value used to shift the ADC value back into range,,
@@ -846,21 +913,21 @@ video_frame,,,,,,,,,,,,,,,
 ,1,frame_number,uint32,,,,,,,,,,Number of the frame that the timestamp and timestamp_ms correlate to,,
 obdii_data,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,Timestamp message was output,,
-,0,timestamp_ms,uint16,,,,,ms,,,,,"Fractional part of timestamp, added to timestamp",,
+,0,timestamp_ms,uint16,,,,,ms,,,,,Fractional part of timestamp, added to timestamp,,
 ,1,time_offset,uint16,[N],,,,ms,,,,,Offset of PID reading [i] from start_timestamp+start_timestamp_ms. Readings may span accross seconds.,,
 ,2,pid,byte,,,,,,,,,,Parameter ID,,
 ,3,raw_data,byte,[N],,,,,,,,,Raw parameter data,,
-,4,pid_data_size,uint8,[N],,,,,,,,,"Optional, data size of PID[i]. If not specified refer to SAE J1979.",,
-,5,system_time,uint32,[N],,,,,,,,,"System time associated with sample expressed in ms, can be used instead of time_offset. There will be a system_time value for each raw_data element. For multibyte pids the system_time is repeated.",,
+,4,pid_data_size,uint8,[N],,,,,,,,,Optional, data size of PID[i]. If not specified refer to SAE J1979.,,
+,5,system_time,uint32,[N],,,,,,,,,System time associated with sample expressed in ms, can be used instead of time_offset. There will be a system_time value for each raw_data element. For multibyte pids the system_time is repeated.,,
 ,6,start_timestamp,date_time,,,,,,,,,,Timestamp of first sample recorded in the message. Used with time_offset to generate time of each sample,,
 ,7,start_timestamp_ms,uint16,,,,,ms,,,,,Fractional part of start_timestamp,,
 nmea_sentence,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,Timestamp message was output,,1
-,0,timestamp_ms,uint16,,,,,ms,,,,,"Fractional part of timestamp, added to timestamp",,1
+,0,timestamp_ms,uint16,,,,,ms,,,,,Fractional part of timestamp, added to timestamp,,1
 ,1,sentence,string,,,,,,,,,,NMEA sentence,,83
 aviation_attitude,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,Timestamp message was output,,1
-,0,timestamp_ms,uint16,,,,,ms,,,,,"Fractional part of timestamp, added to timestamp",,1
+,0,timestamp_ms,uint16,,,,,ms,,,,,Fractional part of timestamp, added to timestamp,,1
 ,1,system_time,uint32,[N],,,,ms,,,,,System time associated with sample expressed in ms.,,1
 ,2,pitch,sint16,[N],,10430.38,,radians,,,,,Range -PI/2 to +PI/2,,1
 ,3,roll,sint16,[N],,10430.38,,radians,,,,,Range -PI to +PI,,1
@@ -868,7 +935,7 @@ aviation_attitude,,,,,,,,,,,,,,,
 ,5,accel_normal,sint16,[N],,100,,m/s^2,,,,,Range -78.4 to +78.4 (-8 Gs to 8 Gs),,1
 ,6,turn_rate,sint16,[N],,1024,,radians/second,,,,,Range -8.727 to +8.727 (-500 degs/sec to +500 degs/sec),,1
 ,7,stage,attitude_stage,[N],,,,,,,,,,,1
-,8,attitude_stage_complete,uint8,[N],,,,%,,,,,"The percent complete of the current attitude stage. Set to 0 for attitude stages 0, 1 and 2 and to 100 for attitude stage 3 by AHRS modules that do not support it. Range - 100",,1
+,8,attitude_stage_complete,uint8,[N],,,,%,,,,,The percent complete of the current attitude stage. Set to 0 for attitude stages 0, 1 and 2 and to 100 for attitude stage 3 by AHRS modules that do not support it. Range - 100,,1
 ,9,track,uint16,[N],,10430.38,,radians,,,,,Track Angle/Heading Range 0 - 2pi,,1
 ,10,validity,attitude_validity,[N],,,,,,,,,,,1
 video,,,,,,,,,,,,,,,
@@ -899,7 +966,7 @@ set,,,,,,,,,,,,,,,
 ,5,set_type,set_type,,,,,,,,,,,,
 ,6,start_time,date_time,,,,,,,,,,Start time of the set,,
 ,7,category,exercise_category,[N],,,,,,,,,,,
-,8,category_subtype,uint16,[N],,,,,,,,,"Based on the associated category, see [category]_exercise_names",,
+,8,category_subtype,uint16,[N],,,,,,,,,Based on the associated category, see [category]_exercise_names,,
 ,9,weight_display_unit,fit_base_unit,,,,,,,,,,,,1
 ,10,message_index,message_index,,,,,,,,,,,,
 ,11,wkt_step_index,message_index,,,,,,,,,,,,
@@ -909,17 +976,46 @@ jump,,,,,,,,,,,,,,,
 ,1,height,float32,,,,,m,,,,,,,
 ,2,rotations,uint8,,,,,,,,,,,,
 ,3,hang_time,float32,,,,,s,,,,,,,
-,4,score,float32,,,,,,,,,,"A score for a jump calculated based on hang time, rotations, and distance.",,
+,4,score,float32,,,,,,,,,,A score for a jump calculated based on hang time, rotations, and distance.,,
 ,5,position_lat,sint32,,,,,semicircles,,,,,,,
 ,6,position_long,sint32,,,,,semicircles,,,,,,,
 ,7,speed,uint16,,enhanced_speed,1000,,m/s,16,,,,,,
 ,8,enhanced_speed,uint32,,,1000,,m/s,,,,,,,
 split,,,,,,,,,,,,,,,
+,254,message_index,message_index,,,,,,,,,,,,
 ,0,split_type,split_type,,,,,,,,,,,,
 ,1,total_elapsed_time,uint32,,,1000,,s,,,,,,,
 ,2,total_timer_time,uint32,,,1000,,s,,,,,,,
 ,3,total_distance,uint32,,,100,,m,,,,,,,
+,4,avg_speed,uint32,,,1000,,m/s,,,,,,,
 ,9,start_time,date_time,,,,,,,,,,,,
+,13,total_ascent,uint16,,,,,m,,,,,,,
+,14,total_descent,uint16,,,,,m,,,,,,,
+,21,start_position_lat,sint32,,,,,semicircles,,,,,,,
+,22,start_position_long,sint32,,,,,semicircles,,,,,,,
+,23,end_position_lat,sint32,,,,,semicircles,,,,,,,
+,24,end_position_long,sint32,,,,,semicircles,,,,,,,
+,25,max_speed,uint32,,,1000,,m/s,,,,,,,
+,26,avg_vert_speed,sint32,,,1000,,m/s,,,,,,,
+,27,end_time,date_time,,,,,,,,,,,,
+,28,total_calories,uint32,,,,,kcal,,,,,,,
+,74,start_elevation,uint32,,,5,500,m,,,,,,,
+,110,total_moving_time,uint32,,,1000,,s,,,,,,,
+split_summary,,,,,,,,,,,,,,,
+,254,message_index,message_index,,,,,,,,,,,,
+,0,split_type,split_type,,,,,,,,,,,,
+,3,num_splits,uint16,,,,,,,,,,,,
+,4,total_timer_time,uint32,,,1000,,s,,,,,,,
+,5,total_distance,uint32,,,100,,m,,,,,,,
+,6,avg_speed,uint32,,,1000,,m/s,,,,,,,
+,7,max_speed,uint32,,,1000,,m/s,,,,,,,
+,8,total_ascent,uint16,,,,,m,,,,,,,
+,9,total_descent,uint16,,,,,m,,,,,,,
+,10,avg_heart_rate,uint8,,,,,bpm,,,,,,,
+,11,max_heart_rate,uint8,,,,,bpm,,,,,,,
+,12,avg_vert_speed,sint32,,,1000,,m/s,,,,,,,
+,13,total_calories,uint32,,,,,kcal,,,,,,,
+,77,total_moving_time,uint32,,,1000,,s,,,,,,,
 climb_pro,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,,,
 ,0,position_lat,sint32,,,,,semicircles,,,,,,,
@@ -982,7 +1078,7 @@ segment_leaderboard_entry,,,,,,,,,,,,,Unique Identification data for an individu
 ,2,group_primary_key,uint32,,,,,,,,,,Primary user ID of this leader,,1
 ,3,activity_id,uint32,,,,,,,,,,ID of the activity associated with this leader time,,1
 ,4,segment_time,uint32,,,1000,,s,,,,,Segment Time (includes pauses),,1
-,5,activity_id_string,string,,,,,,,,,,"String version of the activity_id. 21 characters long, express in decimal",,
+,5,activity_id_string,string,,,,,,,,,,String version of the activity_id. 21 characters long, express in decimal,,
 segment_point,,,,,,,,,,,,,Navigation and race evaluation point for a segment decribing a point along the segment path and time it took each segment leader to reach that point,,
 ,254,message_index,message_index,,,,,,,,,,,,1
 ,1,position_lat,sint32,,,,,semicircles,,,,,,,1
@@ -1097,10 +1193,11 @@ segment_file,,,,,,,,,,,,,Summary of the unique segment and leaderboard informati
 ,7,leader_type,segment_leaderboard_type,[N],,,,,,,,,Leader type of each leader in the segment file,,1
 ,8,leader_group_primary_key,uint32,[N],,,,,,,,,Group primary key of each leader in the segment file,,1
 ,9,leader_activity_id,uint32,[N],,,,,,,,,Activity ID of each leader in the segment file,,1
-,10,leader_activity_id_string,string,[N],,,,,,,,,"String version of the activity ID of each leader in the segment file. 21 characters long for each ID, express in decimal",,
+,10,leader_activity_id_string,string,[N],,,,,,,,,String version of the activity ID of each leader in the segment file. 21 characters long for each ID, express in decimal,,
 ,11,default_race_leader,uint8,,,,,,,,,,Index for the Leader Board entry selected as the default race participant,,
 ,,,WORKOUT FILE MESSAGES,,,,,,,,,,,,
 workout,,,,,,,,,,,,,,,
+,254,message_index,message_index,,,,,,,,,,,,1
 ,4,sport,sport,,,,,,,,,,,,1
 ,5,capabilities,workout_capabilities,,,,,,,,,,,,1
 ,6,num_valid_steps,uint16,,,,,,,,,,number of valid steps,,1
@@ -1121,25 +1218,25 @@ workout_step,,,,,,,,,,,,,,,
 ,0,wkt_step_name,string,,,,,,,,,,,,16
 ,1,duration_type,wkt_step_duration,,,,,,,,,,,,1
 ,2,duration_value,uint32,,,,,,,,,,,,1
-,,duration_time,uint32,,,1000,,s,,,"duration_type,duration_type","time,repetition_time",,,1
+,,duration_time,uint32,,,1000,,s,,,duration_type,duration_type,time,repetition_time,,,1
 ,,duration_distance,uint32,,,100,,m,,,duration_type,distance,,,1
-,,duration_hr,workout_hr,,,,,% or bpm,,,"duration_type,duration_type","hr_less_than,hr_greater_than",,,1
+,,duration_hr,workout_hr,,,,,% or bpm,,,duration_type,duration_type,hr_less_than,hr_greater_than,,,1
 ,,duration_calories,uint32,,,,,calories,,,duration_type,calories,,,1
-,,duration_step,uint32,,,,,,,,"duration_type,duration_type,duration_type,duration_type,duration_type,duration_type,duration_type,duration_type","repeat_until_steps_cmplt,repeat_until_time,repeat_until_distance,repeat_until_calories,repeat_until_hr_less_than,repeat_until_hr_greater_than,repeat_until_power_less_than,repeat_until_power_greater_than",message_index of step to loop back to. Steps are assumed to be in the order by message_index. custom_name and intensity members are undefined for this duration type.,,1
-,,duration_power,workout_power,,,,,% or watts,,,"duration_type,duration_type","power_less_than,power_greater_than",,,1
+,,duration_step,uint32,,,,,,,,duration_type,duration_type,duration_type,duration_type,duration_type,duration_type,duration_type,duration_type,repeat_until_steps_cmplt,repeat_until_time,repeat_until_distance,repeat_until_calories,repeat_until_hr_less_than,repeat_until_hr_greater_than,repeat_until_power_less_than,repeat_until_power_greater_than,message_index of step to loop back to. Steps are assumed to be in the order by message_index. custom_name and intensity members are undefined for this duration type.,,1
+,,duration_power,workout_power,,,,,% or watts,,,duration_type,duration_type,power_less_than,power_greater_than,,,1
 ,,duration_reps,uint32,,,,,,,,duration_type,reps,,,1
 ,3,target_type,wkt_step_target,,,,,,,,,,,,1
 ,4,target_value,uint32,,,,,,,,,,,,1
-,,target_speed_zone,uint32,,,,,,,,target_type,speed,speed zone (1-10);Custom =0;,,1
-,,target_hr_zone,uint32,,,,,,,,target_type,heart_rate,hr zone (1-5);Custom =0;,,1
-,,target_cadence_zone,uint32,,,,,,,,target_type,cadence,Zone (1-?); Custom = 0;,,1
-,,target_power_zone,uint32,,,,,,,,target_type,power,Power Zone ( 1-7); Custom = 0;,,1
+,,target_speed_zone,uint32,,,,,,,,target_type,speed,"speed zone (1-10),Custom =0,",,1
+,,target_hr_zone,uint32,,,,,,,,target_type,heart_rate,"hr zone (1-5),Custom =0,",,1
+,,target_cadence_zone,uint32,,,,,,,,target_type,cadence,"Zone (1-?), Custom = 0,",,1
+,,target_power_zone,uint32,,,,,,,,target_type,power,"Power Zone ( 1-7), Custom = 0,",,1
 ,,repeat_steps,uint32,,,,,,,,duration_type,repeat_until_steps_cmplt,# of repetitions,,1
 ,,repeat_time,uint32,,,1000,,s,,,duration_type,repeat_until_time,,,1
 ,,repeat_distance,uint32,,,100,,m,,,duration_type,repeat_until_distance,,,1
 ,,repeat_calories,uint32,,,,,calories,,,duration_type,repeat_until_calories,,,1
-,,repeat_hr,workout_hr,,,,,% or bpm,,,"duration_type,duration_type","repeat_until_hr_less_than,repeat_until_hr_greater_than",,,1
-,,repeat_power,workout_power,,,,,% or watts,,,"duration_type,duration_type","repeat_until_power_less_than,repeat_until_power_greater_than",,,1
+,,repeat_hr,workout_hr,,,,,% or bpm,,,duration_type,duration_type,repeat_until_hr_less_than,repeat_until_hr_greater_than,,,1
+,,repeat_power,workout_power,,,,,% or watts,,,duration_type,duration_type,repeat_until_power_less_than,repeat_until_power_greater_than,,,1
 ,,target_stroke_type,swim_stroke,,,,,,,,target_type,swim_stroke,,,1
 ,5,custom_target_value_low,uint32,,,,,,,,,,,,1
 ,,custom_target_speed_low,uint32,,,1000,,m/s,,,target_type,speed,,,1
@@ -1160,10 +1257,10 @@ workout_step,,,,,,,,,,,,,,,
 ,13,weight_display_unit,fit_base_unit,,,,,,,,,,,,
 ,19,secondary_target_type,wkt_step_target,,,,,,,,,,,,1
 ,20,secondary_target_value,uint32,,,,,,,,,,,,1
-,,secondary_target_speed_zone,uint32,,,,,,,,secondary_target_type,speed,speed zone (1-10);Custom =0;,,1
-,,secondary_target_hr_zone,uint32,,,,,,,,secondary_target_type,heart_rate,hr zone (1-5);Custom =0;,,1
-,,secondary_target_cadence_zone,uint32,,,,,,,,secondary_target_type,cadence,Zone (1-?); Custom = 0;,,1
-,,secondary_target_power_zone,uint32,,,,,,,,secondary_target_type,power,Power Zone ( 1-7); Custom = 0;,,1
+,,secondary_target_speed_zone,uint32,,,,,,,,secondary_target_type,speed,"speed zone (1-10),Custom =0,",,1
+,,secondary_target_hr_zone,uint32,,,,,,,,secondary_target_type,heart_rate,"hr zone (1-5),Custom =0,",,1
+,,secondary_target_cadence_zone,uint32,,,,,,,,secondary_target_type,cadence,"Zone (1-?), Custom = 0,",,1
+,,secondary_target_power_zone,uint32,,,,,,,,secondary_target_type,power,"Power Zone ( 1-7), Custom = 0,",,1
 ,,secondary_target_stroke_type,swim_stroke,,,,,,,,secondary_target_type,swim_stroke,,,1
 ,21,secondary_custom_target_value_low,uint32,,,,,,,,,,,,1
 ,,secondary_custom_target_speed_low,uint32,,,1000,,m/s,,,secondary_target_type,speed,,,1
@@ -1185,7 +1282,7 @@ schedule,,,,,,,,,,,,,,,
 ,0,manufacturer,manufacturer,,,,,,,,,,Corresponds to file_id of scheduled workout / course.,,1
 ,1,product,uint16,,,,,,,,,,Corresponds to file_id of scheduled workout / course.,,1
 ,,favero_product,favero_product,,,,,,,,manufacturer,favero_electronics,,,
-,,garmin_product,garmin_product,,,,,,,,"manufacturer,manufacturer,manufacturer,manufacturer","garmin,dynastream,dynastream_oem,tacx",,,1
+,,garmin_product,garmin_product,,,,,,,,manufacturer,manufacturer,manufacturer,manufacturer,garmin,dynastream,dynastream_oem,tacx,,,1
 ,2,serial_number,uint32z,,,,,,,,,,Corresponds to file_id of scheduled workout / course.,,1
 ,3,time_created,date_time,,,,,,,,,,Corresponds to file_id of scheduled workout / course.,,1
 ,4,completed,bool,,,,,,,,,,TRUE if this activity has been started,,1
@@ -1214,10 +1311,11 @@ weight_scale,,,,,,,,,,,,,,,
 ,5,muscle_mass,uint16,,,100,,kg,,,,,,,1
 ,7,basal_met,uint16,,,4,,kcal/day,,,,,,,1
 ,8,physique_rating,uint8,,,,,,,,,,,,1
-,9,active_met,uint16,,,4,,kcal/day,,,,,"~4kJ per kcal, 0.25 allows max 16384 kcal",,1
+,9,active_met,uint16,,,4,,kcal/day,,,,,~4kJ per kcal, 0.25 allows max 16384 kcal,,1
 ,10,metabolic_age,uint8,,,,,years,,,,,,,1
 ,11,visceral_fat_rating,uint8,,,,,,,,,,,,1
 ,12,user_profile_index,message_index,,,,,,,,,,Associates this weight scale message to a user. This corresponds to the index of the user profile message in the weight scale file.,,1
+,13,bmi,uint16,,,10,,kg/m^2,,,,,,,1
 ,,,BLOOD PRESSURE FILE MESSAGES,,,,,,,,,,,,
 blood_pressure,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,,,1
@@ -1240,13 +1338,13 @@ monitoring_info,,,,,,,,,,,,,,,
 ,4,cycles_to_calories,uint16,[N],,5000,,kcal/cycle,,,,,Indexed by activity_type,,
 ,5,resting_metabolic_rate,uint16,,,,,kcal / day,,,,,,,
 monitoring,,,,,,,,,,,,,,,
-,253,timestamp,date_time,,,,,s,,,,,"Must align to logging interval, for example, time must be 00:00:00 for daily log.",,1
+,253,timestamp,date_time,,,,,s,,,,,Must align to logging interval, for example, time must be 00:00:00 for daily log.,,1
 ,0,device_index,device_index,,,,,,,,,,Associates this data to device_info message. Not required for file with single device (sensor).,,1
 ,1,calories,uint16,,,,,kcal,,,,,Accumulated total calories. Maintained by MonitoringReader for each activity_type. See SDK documentation,,1
 ,2,distance,uint32,,,100,,m,,,,,Accumulated distance. Maintained by MonitoringReader for each activity_type. See SDK documentation.,,1
 ,3,cycles,uint32,,,2,,cycles,,,,,Accumulated cycles. Maintained by MonitoringReader for each activity_type. See SDK documentation.,,1
-,,steps,uint32,,,1,,steps,,,"activity_type,activity_type","walking,running",,,
-,,strokes,uint32,,,2,,strokes,,,"activity_type,activity_type","cycling,swimming",,,1
+,,steps,uint32,,,1,,steps,,,activity_type,activity_type,walking,running,,,
+,,strokes,uint32,,,2,,strokes,,,activity_type,activity_type,cycling,swimming,,,1
 ,4,active_time,uint32,,,1000,,s,,,,,,,1
 ,5,activity_type,activity_type,,,,,,,,,,,,1
 ,6,activity_subtype,activity_subtype,,,,,,,,,,,,1
@@ -1254,13 +1352,13 @@ monitoring,,,,,,,,,,,,,,,
 ,8,distance_16,uint16,,,,,100 * m,,,,,,,1
 ,9,cycles_16,uint16,,,,,2 * cycles (steps),,,,,,,1
 ,10,active_time_16,uint16,,,,,s,,,,,,,1
-,11,local_timestamp,local_date_time,,,,,,,,,,"Must align to logging interval, for example, time must be 00:00:00 for daily log.",,1
+,11,local_timestamp,local_date_time,,,,,,,,,,Must align to logging interval, for example, time must be 00:00:00 for daily log.,,1
 ,12,temperature,sint16,,,100,,C,,,,,Avg temperature during the logging interval ended at timestamp,,
 ,14,temperature_min,sint16,,,100,,C,,,,,Min temperature during the logging interval ended at timestamp,,
 ,15,temperature_max,sint16,,,100,,C,,,,,Max temperature during the logging interval ended at timestamp,,
 ,16,activity_time,uint16,[8],,,,minutes,,,,,Indexed using minute_activity_level enum,,
 ,19,active_calories,uint16,,,,,kcal,,,,,,,
-,24,current_activity_type_intensity,byte,,"activity_type,intensity",,,,"5,3",,,,Indicates single type / intensity for duration since last monitoring message.,,
+,24,current_activity_type_intensity,byte,,activity_type,intensity,,,,5,3,,,,Indicates single type / intensity for duration since last monitoring message.,,
 ,25,timestamp_min_8,uint8,,,,,min,,,,,,,
 ,26,timestamp_16,uint16,,,,,s,,,,,,,
 ,27,heart_rate,uint8,,,,,bpm,,,,,,,
@@ -1271,16 +1369,34 @@ monitoring,,,,,,,,,,,,,,,
 ,32,descent,uint32,,,1000,,m,,,,,,,
 ,33,moderate_activity_minutes,uint16,,,,,minutes,,,,,,,
 ,34,vigorous_activity_minutes,uint16,,,,,minutes,,,,,,,
+monitoring_hr_data,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,s,,,,,Must align to logging interval, for example, time must be 00:00:00 for daily log.,,1
+,0,resting_heart_rate,uint8,,,,,bpm,,,,,7-day rolling average,,1
+,1,current_day_resting_heart_rate,uint8,,,,,bpm,,,,,RHR for today only. (Feeds into 7-day average),,1
+spo2_data,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,s,,,,,,,
+,0,reading_spo2,uint8,,,1,,percent,,,,,,,
+,1,reading_confidence,uint8,,,1,,,,,,,,,
+,2,mode,spo2_measurement_type,,,,,,,,,,Mode when data was captured,,
 hr,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,,,,,,,,1
 ,0,fractional_timestamp,uint16,,,32768,,s,,,,,,,1
 ,1,time256,uint8,,fractional_timestamp,256,,s,8,,,,,,1
 ,6,filtered_bpm,uint8,[N],,,,bpm,,,,,,,1
 ,9,event_timestamp,uint32,[N],,1024,,s,,,,,,,1
-,10,event_timestamp_12,byte,[N],"event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp","1024,1024,1024,1024,1024,1024,1024,1024,1024,1024",,s,"12,12,12,12,12,12,12,12,12,12","1,1,1,1,1,1,1,1,1,1",,,,,1
+,10,event_timestamp_12,byte,[N],event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,event_timestamp,1024,1024,1024,1024,1024,1024,1024,1024,1024,1024,,s,12,12,12,12,12,12,12,12,12,12,1,1,1,1,1,1,1,1,1,1,,,,,1
 stress_level,,,,,,,,,,,,,Value from 1 to 100 calculated by FirstBeat,,
 ,0,stress_level_value,sint16,,,,,,,,,,,,
 ,1,stress_level_time,date_time,,,,,s,,,,,Time stress score was calculated,,
+max_met_data,,,,,,,,,,,,,,,
+,0,update_time,date_time,,,,,,,,,,Time maxMET and vo2 were calculated,,
+,2,vo2_max,uint16,,,10,,mL/kg/min,,,,,,,
+,5,sport,sport,,,,,,,,,,,,
+,6,sub_sport,sub_sport,,,,,,,,,,,,
+,8,max_met_category,max_met_category,,,,,,,,,,,,
+,9,calibrated_data,bool,,,,,,,,,,Indicates if calibrated data was used in the calculation,,
+,12,hr_source,max_met_heart_rate_source,,,,,,,,,,Indicates if the estimate was obtained using a chest strap or wrist heart rate,,
+,13,speed_source,max_met_speed_source,,,,,,,,,,Indidcates if the estimate was obtained using onboard GPS or connected GPS,,
 ,,,OTHER MESSAGES,,,,,,,,,,,,
 memo_glob,,,,,,,,,,,,,,,
 ,250,part_index,uint32,,,,,,,,,,Sequence number of memo blocks,,
@@ -1288,7 +1404,10 @@ memo_glob,,,,,,,,,,,,,,,
 ,1,mesg_num,mesg_num,,,,,,,,,,Message Number of the parent message,,
 ,2,parent_index,message_index,,,,,,,,,,Index of mesg that this glob is associated with.,,
 ,3,field_num,uint8,,,,,,,,,,Field within the parent that this glob is associated with,,
-,4,data,uint8z,[N],,,,,,,,,"Block of utf8 bytes. Note, mutltibyte characters may be split across adjoining memo_glob messages.",,
+,4,data,uint8z,[N],,,,,,,,,Block of utf8 bytes. Note, mutltibyte characters may be split across adjoining memo_glob messages.,,
+sleep_level,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,s,,,,,,,
+,0,sleep_level,sleep_level,,,,,,,,,,,,
 ant_channel_id,,,,,,,,,,,,,,,
 ,0,channel_number,uint8,,,,,,,,,,,,
 ,1,device_type,uint8z,,,,,,,,,,,,
@@ -1299,14 +1418,14 @@ ant_rx,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,,,1
 ,0,fractional_timestamp,uint16,,,32768,,s,,,,,,,1
 ,1,mesg_id,byte,,,,,,,,,,,,1
-,2,mesg_data,byte,[N],"channel_number,data,data,data,data,data,data,data,data",,,,"8,8,8,8,8,8,8,8,8",,,,,,9
+,2,mesg_data,byte,[N],channel_number,data,data,data,data,data,data,data,data,,,,8,8,8,8,8,8,8,8,8,,,,,,9
 ,3,channel_number,uint8,,,,,,,,,,,,1
 ,4,data,byte,[N],,,,,,,,,,,8
 ant_tx,,,,,,,,,,,,,,,
 ,253,timestamp,date_time,,,,,s,,,,,,,1
 ,0,fractional_timestamp,uint16,,,32768,,s,,,,,,,1
 ,1,mesg_id,byte,,,,,,,,,,,,1
-,2,mesg_data,byte,[N],"channel_number,data,data,data,data,data,data,data,data",,,,"8,8,8,8,8,8,8,8,8",,,,,,9
+,2,mesg_data,byte,[N],channel_number,data,data,data,data,data,data,data,data,,,,8,8,8,8,8,8,8,8,8,,,,,,9
 ,3,channel_number,uint8,,,,,,,,,,,,1
 ,4,data,byte,[N],,,,,,,,,,,8
 exd_screen_configuration,,,,,,,,,,,,,,,
@@ -1316,14 +1435,14 @@ exd_screen_configuration,,,,,,,,,,,,,,,
 ,3,screen_enabled,bool,,,,,,,,,,,,1
 exd_data_field_configuration,,,,,,,,,,,,,,,
 ,0,screen_index,uint8,,,,,,,,,,,,1
-,1,concept_field,byte,,"field_id,concept_count",,,,"4,4",,,,,,1
+,1,concept_field,byte,,field_id,concept_count,,,,4,4,,,,,,1
 ,2,field_id,uint8,,,,,,,,,,,,1
 ,3,concept_count,uint8,,,,,,,,,,,,1
 ,4,display_type,exd_display_type,,,,,,,,,,,,1
 ,5,title,string,[32],,,,,,,,,,,1
 exd_data_concept_configuration,,,,,,,,,,,,,,,
 ,0,screen_index,uint8,,,,,,,,,,,,1
-,1,concept_field,byte,,"field_id,concept_index",,,,"4,4",,,,,,1
+,1,concept_field,byte,,field_id,concept_index,,,,4,4,,,,,,1
 ,2,field_id,uint8,,,,,,,,,,,,1
 ,3,concept_index,uint8,,,,,,,,,,,,1
 ,4,data_page,uint8,,,,,,,,,,,,1
@@ -1347,10 +1466,59 @@ dive_summary,,,,,,,,,,,,,,,
 ,9,o2_toxicity,uint16,,,,,OTUs,,,,,,,
 ,10,dive_number,uint32,,,,,,,,,,,,
 ,11,bottom_time,uint32,,,1000,,s,,,,,,,
-,17,avg_ascent_rate,sint32,,,1000,,m/s,,,,,"Average ascent rate, not including descents or stops",,
-,22,avg_descent_rate,uint32,,,1000,,m/s,,,,,"Average descent rate, not including ascents or stops",,
+,12,avg_pressure_sac,uint16,,,100,,bar/min,,,,,Average pressure-based surface air consumption,,
+,13,avg_volume_sac,uint16,,,100,,L/min,,,,,Average volumetric surface air consumption,,
+,14,avg_rmv,uint16,,,100,,L/min,,,,,Average respiratory minute volume,,
+,15,descent_time,uint32,,,1000,,s,,,,,Time to reach deepest level stop,,
+,16,ascent_time,uint32,,,1000,,s,,,,,Time after leaving bottom until reaching surface,,
+,17,avg_ascent_rate,sint32,,,1000,,m/s,,,,,Average ascent rate, not including descents or stops,,
+,22,avg_descent_rate,uint32,,,1000,,m/s,,,,,Average descent rate, not including ascents or stops,,
 ,23,max_ascent_rate,uint32,,,1000,,m/s,,,,,Maximum ascent rate,,
 ,24,max_descent_rate,uint32,,,1000,,m/s,,,,,Maximum descent rate,,
 ,25,hang_time,uint32,,,1000,,s,,,,,Time spent neither ascending nor descending,,
 hrv,,,,,,,,,,,,,Heart rate variability,,
 ,0,time,uint16,[N],,1000,,s,,,,,Time between beats,,1
+beat_intervals,,,,,,,,,,,,,Array of heart beat intervals,,1
+,253,timestamp,date_time,,,,,,,,,,,,
+,0,timestamp_ms,uint16,,,,,ms,,,,,Milliseconds past date_time,,
+,1,time,uint16,[N],,,,ms,,,,,Array of millisecond times between beats,,
+hrv_status_summary,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,,,,,,,,
+,0,weekly_average,uint16,,,128,,ms,,,,,7 day RMSSD average over sleep,,
+,1,last_night_average,uint16,,,128,,ms,,,,,Last night RMSSD average over sleep,,
+,2,last_night_5_min_high,uint16,,,128,,ms,,,,,5 minute high RMSSD value over sleep,,
+,3,baseline_low_upper,uint16,,,128,,ms,,,,,3 week baseline, upper boundary of low HRV status,,
+,4,baseline_balanced_lower,uint16,,,128,,ms,,,,,3 week baseline, lower boundary of balanced HRV status,,
+,5,baseline_balanced_upper,uint16,,,128,,ms,,,,,3 week baseline, upper boundary of balanced HRV status,,
+,6,status,hrv_status,,,,,,,,,,,,
+hrv_value,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,,,,,,,,
+,0,value,uint16,,,128,,ms,,,,,5 minute RMSSD,,
+respiration_rate,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,,,,,,,,
+,0,respiration_rate,sint16,,,100,,breaths/min,,,,,Breaths * 100 /min, -300 indicates invalid, -200 indicates large motion, -100 indicates off wrist,,
+tank_update,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,s,,,,,,,
+,0,sensor,ant_channel_id,,,,,,,,,,,,
+,1,pressure,uint16,,,100,,bar,,,,,,,
+tank_summary,,,,,,,,,,,,,,,
+,253,timestamp,date_time,,,,,s,,,,,,,
+,0,sensor,ant_channel_id,,,,,,,,,,,,
+,1,start_pressure,uint16,,,100,,bar,,,,,,,
+,2,end_pressure,uint16,,,100,,bar,,,,,,,
+,3,volume_used,uint32,,,100,,L,,,,,,,
+sleep_assessment,,,,,,,,,,,,,,,
+,0,combined_awake_score,uint8,,,,,,,,,,Average of awake_time_score and awakenings_count_score. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,1,awake_time_score,uint8,,,,,,,,,,Score that evaluates the total time spent awake between sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,2,awakenings_count_score,uint8,,,,,,,,,,Score that evaluates the number of awakenings that interrupt sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,3,deep_sleep_score,uint8,,,,,,,,,,Score that evaluates the amount of deep sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,4,sleep_duration_score,uint8,,,,,,,,,,Score that evaluates the quality of sleep based on sleep stages, heart-rate variability and possible awakenings during the night. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,5,light_sleep_score,uint8,,,,,,,,,,Score that evaluates the amount of light sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,6,overall_sleep_score,uint8,,,,,,,,,,Total score that summarizes the overall quality of sleep, combining sleep duration and quality. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,7,sleep_quality_score,uint8,,,,,,,,,,Score that evaluates the quality of sleep based on sleep stages, heart-rate variability and possible awakenings during the night. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,8,sleep_recovery_score,uint8,,,,,,,,,,Score that evaluates stress and recovery during sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,9,rem_sleep_score,uint8,,,,,,,,,,Score that evaluates the amount of REM sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,10,sleep_restlessness_score,uint8,,,,,,,,,,Score that evaluates the amount of restlessness during sleep. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,11,awakenings_count,uint8,,,,,,,,,,The number of awakenings during sleep.,,
+,14,interruptions_score,uint8,,,,,,,,,,Score that evaluates the sleep interruptions. If valid: 0 (worst) to 100 (best). If unknown: FIT_UINT8_INVALID.,,
+,15,average_stress_during_sleep,uint16,,,100,,,,,,,Excludes stress during awake periods in the sleep window,,

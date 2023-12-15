@@ -5,7 +5,6 @@
 // Extracted from CSV versions of the Profile Message tab in Profile.xlsx
 // add private in front of $data_mesg_info when updating FITFile.php
 
-
 $data_mesg_info = [
 	0 => ['mesg_name' => 'file_id', 'field_defns' => [
 		0 => ['field_name' => 'type', 'field_type' => 'file', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],

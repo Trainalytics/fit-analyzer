@@ -5,7 +5,6 @@
 // Extracted from CSV versions of the Profile Type tab in Profile.xlsx
 // add private in front of $enum_data when updating FITFile.php
 
-
 $enum_data = [
 	'file' => [
 		'type' => 'enum',
