@@ -1312,6 +1312,7 @@ $data_mesg_info = [
 		11 => ['field_name' => 'default_race_leader', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Index for the Leader Board entry selected as the default race participant (e.g. )
 	]],
 	26 => ['mesg_name' => 'workout', 'field_defns' => [
+		254 => ['field_name' => 'message_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		4 => ['field_name' => 'sport', 'field_type' => 'sport', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		5 => ['field_name' => 'capabilities', 'field_type' => 'workout_capabilities', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		6 => ['field_name' => 'num_valid_steps', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // number of valid steps (e.g. 1)
@@ -1450,6 +1451,7 @@ $data_mesg_info = [
 		10 => ['field_name' => 'metabolic_age', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'years', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		11 => ['field_name' => 'visceral_fat_rating', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		12 => ['field_name' => 'user_profile_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Associates this weight scale message to a user. This corresponds to the index of the user profile message in the weight scale file. (e.g. 1)
+		13 => ['field_name' => 'bmi', 'field_type' => 'uint16', 'scale' => 10, 'offset' => 0, 'units' => 'kg/m^2', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 	]],
 	51 => ['mesg_name' => 'blood_pressure', 'field_defns' => [
 		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
