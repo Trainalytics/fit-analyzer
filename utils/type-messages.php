@@ -1509,6 +1509,11 @@ $data_mesg_info = [
 		33 => ['field_name' => 'moderate_activity_minutes', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'minutes', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		34 => ['field_name' => 'vigorous_activity_minutes', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'minutes', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 	]],
+	211 => ['mesg_name' => 'monitoring_hr_data', 'field_defns' => [
+		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Must align to logging interval, for example, time must be 00:00:00 for daily log.
+		0 => ['field_name' => 'resting_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 7-day rolling average
+		1 => ['field_name' => 'current_day_resting_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // RHR for today only. (Feeds into 7-day average)
+	]],
 	132 => ['mesg_name' => 'hr', 'field_defns' => [
 		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		0 => ['field_name' => 'fractional_timestamp', 'field_type' => 'uint16', 'scale' => 32768, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
