@@ -1647,4 +1647,17 @@ $data_mesg_info = [
 		5 => ['field_name' => 'baseline_balanced_upper', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 3 week baseline, upper boundary of balanced HRV status (e.g. )
 		6 => ['field_name' => 'status', 'field_type' => 'hrv_status', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 	]],
+	371 => ['mesg_name' => 'hrv_value', 'field_defns' => [
+		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		0 => ['field_name' => 'value', 'field_type' => 'uint16', 'scale' => 128, 'offset' => 0, 'units' => 'ms', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // 5 minute RMSSD (e.g. )
+	]],
+	297 => ['mesg_name' => 'respiration_rate', 'field_defns' => [
+		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		0 => ['field_name' => 'respiration_rate', 'field_type' => 'sint16', 'scale' => 100, 'offset' => 0, 'units' => 'breaths/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Breaths * 100 /min, -300 indicates invalid, -200 indicates large motion, -100 indicates off wrist (e.g. )
+	]],
+	319 => ['mesg_name' => 'tank_update', 'field_defns' => [
+		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		0 => ['field_name' => 'sensor', 'field_type' => 'ant_channel_id', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		1 => ['field_name' => 'pressure', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'bar', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+	]],
 ];
