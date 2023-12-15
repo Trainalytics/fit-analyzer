@@ -1106,7 +1106,22 @@ $data_mesg_info = [
 		28 => ['field_name' => 'total_calories', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => 'kcal', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		74 => ['field_name' => 'start_elevation', 'field_type' => 'uint32', 'scale' => 5, 'offset' => 500, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		110 => ['field_name' => 'total_moving_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
-
+	]],
+	313 => ['mesg_name' => 'split_summary', 'field_defns' => [
+		254 => ['field_name' => 'message_index', 'field_type' => 'message_index', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		0 => ['field_name' => 'split_type', 'field_type' => 'split_type', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		3 => ['field_name' => 'num_splits', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		4 => ['field_name' => 'total_timer_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		5 => ['field_name' => 'total_distance', 'field_type' => 'uint32', 'scale' => 100, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		6 => ['field_name' => 'avg_speed', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		7 => ['field_name' => 'max_speed', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		8 => ['field_name' => 'total_ascent', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		9 => ['field_name' => 'total_descent', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		10 => ['field_name' => 'avg_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		11 => ['field_name' => 'max_heart_rate', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => 'bpm', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		12 => ['field_name' => 'avg_vert_speed', 'field_type' => 'sint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		13 => ['field_name' => 'total_calories', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => 'kcal', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		77 => ['field_name' => 'total_moving_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 	]],
 	317 => ['mesg_name' => 'climb_pro', 'field_defns' => [
 		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
