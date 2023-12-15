@@ -1618,6 +1618,13 @@ $data_mesg_info = [
 		9 => ['field_name' => 'o2_toxicity', 'field_type' => 'uint16', 'scale' => 1, 'offset' => 0, 'units' => 'OTUs', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		10 => ['field_name' => 'dive_number', 'field_type' => 'uint32', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		11 => ['field_name' => 'bottom_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+
+		12 => ['field_name' => 'avg_pressure_sac', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'bar/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average pressure-based surface air consumption (e.g )
+		13 => ['field_name' => 'avg_volume_sac', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'L/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average volumetric surface air consumption (e.g )
+		14 => ['field_name' => 'avg_rmv', 'field_type' => 'uint16', 'scale' => 100, 'offset' => 0, 'units' => 'L/min', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average respiratory minute volume (e.g )
+		15 => ['field_name' => 'descent_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time to reach deepest level stop (e.g )
+		16 => ['field_name' => 'ascent_time', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Time after leaving bottom until reaching surface (e.g )
+
 		17 => ['field_name' => 'avg_ascent_rate', 'field_type' => 'sint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average ascent rate, not including descents or stops (e.g. )
 		22 => ['field_name' => 'avg_descent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Average descent rate, not including ascents or stops (e.g. )
 		23 => ['field_name' => 'max_ascent_rate', 'field_type' => 'uint32', 'scale' => 1000, 'offset' => 0, 'units' => 'm/s', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Maximum ascent rate (e.g. )
