@@ -1550,6 +1550,10 @@ $data_mesg_info = [
 		3 => ['field_name' => 'field_num', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Field within the parent that this glob is associated with (e.g. )
 		4 => ['field_name' => 'data', 'field_type' => 'uint8z', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''], // Block of utf8 bytes. Note, mutltibyte characters may be split across adjoining memo_glob messages. (e.g. )
 	]],
+	275 => ['mesg_name' => 'sleep_level', 'field_defns' => [
+		253 => ['field_name' => 'timestamp', 'field_type' => 'date_time', 'scale' => 1, 'offset' => 0, 'units' => 's', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+		0 => ['field_name' => 'sleep_level', 'field_type' => 'sleep_level', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
+	]],
 	82 => ['mesg_name' => 'ant_channel_id', 'field_defns' => [
 		0 => ['field_name' => 'channel_number', 'field_type' => 'uint8', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
 		1 => ['field_name' => 'device_type', 'field_type' => 'uint8z', 'scale' => 1, 'offset' => 0, 'units' => '', 'bits' => '', 'accumulate' => '', 'ref_field_type' => '', 'ref_field_name' => ''],
