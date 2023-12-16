@@ -60,6 +60,9 @@ $date->setTimestamp($date_s);
 			<th>Recorded</th>
 			<th>Duration</th>
 			<th>Distance</th>
+			<th>Workout Name</th>
+			<th>Average Heart Rate</th>
+			<th>Calories</th>
 		</tr>
 		<tr>
 			<td><?= $fitFile->manufacturer() . ' ' . $fitFile->product(); ?></td>
@@ -67,6 +70,9 @@ $date->setTimestamp($date_s);
 			<td><?= $date->format('D, d-M-y H:i:s'); ?></td>
 			<td><?= gmdate('H:i:s', $fitFile->data_mesgs['session']['total_elapsed_time']); ?></td>
 			<td><?= max($fitFile->data_mesgs['record']['distance']); ?> km</td>
+			<td><?= $fitFile->data_mesgs['workout']['wkt_name']; ?></td>
+			<td><?= $fitFile->data_mesgs['session']['avg_heart_rate']; ?></td>
+			<td><?= $fitFile->data_mesgs['session']['total_calories']; ?></td>
 		</tr>
 	</table>
 </body>
