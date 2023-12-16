@@ -2,10 +2,10 @@
 
 use fitparse\FITFile;
 
-require __DIR__ . 'FITFile.php';
+require __DIR__ . '\FITFile.php';
 
 try {
-	$file = '../activity/running.fit';
+	$file = '/running.fit';
 	$options = [
 		// Just using the defaults so no need to provide
 		//		'fix_data'	=> [],
@@ -19,20 +19,10 @@ try {
 	die();
 }
 
-// Create an array of lat/long coordiantes for the map
-$position_lat = $fitFile->data_mesgs['record']['position_lat'];
-$position_long = $fitFile->data_mesgs['record']['position_long'];
-$lat_long_combined = [];
-foreach ($position_lat as $key => $value) {  // Assumes every lat has a corresponding long
-	$lat_long_combined[] = '[' . $position_lat[$key] . ',' . $position_long[$key] . ']';
-}
-
-echo ($position_lat);
-
-// Date with Google timezoneAPI removed
 $date = new DateTime('now', new DateTimeZone('UTC'));
 $date_s = $fitFile->data_mesgs['session']['start_time'];
 $date->setTimestamp($date_s);
+
 ?>
 
 <!DOCTYPE html>
@@ -42,10 +32,43 @@ $date->setTimestamp($date_s);
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Trainalytics - Running</title>
+	<style>
+		table {
+			font-family: arial, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		td,
+		th {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+
+		tr:nth-child(even) {
+			background-color: #dddddd;
+		}
+	</style>
 </head>
 
 <body>
-
+	<table>
+		<tr>
+			<th>Device</th>
+			<th>Sport</th>
+			<th>Recorded</th>
+			<th>Duration</th>
+			<th>Distance</th>
+		</tr>
+		<tr>
+			<td><?= $fitFile->manufacturer() . ' ' . $fitFile->product(); ?></td>
+			<td><?= $fitFile->sport(); ?></td>
+			<td><?= $date->format('D, d-M-y H:i:s'); ?></td>
+			<td><?= gmdate('H:i:s', $fitFile->data_mesgs['session']['total_elapsed_time']); ?></td>
+			<td><?= max($fitFile->data_mesgs['record']['distance']); ?> km</td>
+		</tr>
+	</table>
 </body>
 
 </html>

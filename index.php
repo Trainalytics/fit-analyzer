@@ -9,6 +9,7 @@
 
 <body>
 	<p>Index of the project</p>
+	<a href="src/running.php">Running PHP</a>
 </body>
 
 </html>

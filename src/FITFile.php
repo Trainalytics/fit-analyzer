@@ -44,8 +44,6 @@ if (!defined('FIT_UNIX_TS_DIFF')) {
 	define('FIT_UNIX_TS_DIFF', 631065600);
 }
 
-require_once('type_enums.php');
-
 class FITFile
 {
 	public $data_mesgs = [];  // Used to store the data read from the file in associative arrays.
