@@ -41,7 +41,7 @@ if (($open = fopen("Profile-types.csv", "r")) !== FALSE) {
 $fp = fopen('type-enums.php', 'w');
 fwrite($fp, "<?php\n\n// VERSION: $sdk_version\n// Automatically extracted from FIT SDK https://developer.garmin.com/fit/download/");
 fwrite($fp, "\n// Extracted from CSV versions of the Profile Type tab in Profile.xlsx\n");
-fwrite($fp, "//add private in front of \$enum_data when updating phpFitFileAnaysis.php\n");
+fwrite($fp, "// add private in front of \$enum_data when updating FITFile.php\n");
 fwrite($fp, "\n\n" . $enum);
 fclose($fp);
 
@@ -178,6 +178,6 @@ function addDynamic($fp, $data, $data_msg)
 $fp = fopen('type-messages.php', 'w');
 fwrite($fp, "<?php\n\n// VERSION: $sdk_version\n// Automatically extracted from FIT SDK https://developer.garmin.com/fit/download/");
 fwrite($fp, "\n// Extracted from CSV versions of the Profile Message tab in Profile.xlsx\n");
-fwrite($fp, "//add private in front of \$data_mesg_info when updating phpFitFileAnaysis.php\n");
+fwrite($fp, "// add private in front of \$data_mesg_info when updating FITFile.php\n");
 fwrite($fp, "\n\n" . $data_msg);
 fclose($fp);
