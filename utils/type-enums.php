@@ -5,22 +5,23 @@
 // Extracted from CSV versions of the Profile Type tab in Profile.xlsx
 // add private in front of $enum_data when updating FITFile.php
 
+
 $enum_data = [
 	'file' => [
 		'type' => 'enum',
-		1 => 'device', // Read only, single file. Must be in root directory.
-		2 => 'settings', // Read/write, single file. Directory=Settings
-		3 => 'sport', // Read/write, multiple files, file number = sport type. Directory=Sports
-		4 => 'activity', // Read/erase, multiple files. Directory=Activities
-		5 => 'workout', // Read/write/erase, multiple files. Directory=Workouts
-		6 => 'course', // Read/write/erase, multiple files. Directory=Courses
-		7 => 'schedules', // Read/write, single file. Directory=Schedules
-		9 => 'weight', // Read only, single file. Circular buffer. All message definitions at start of file. Directory=Weight
-		10 => 'totals', // Read only, single file. Directory=Totals
-		11 => 'goals', // Read/write, single file. Directory=Goals
+		1 => 'device', // Read only
+		2 => 'settings', // Read/write
+		3 => 'sport', // Read/write
+		4 => 'activity', // Read/erase
+		5 => 'workout', // Read/write/erase
+		6 => 'course', // Read/write/erase
+		7 => 'schedules', // Read/write
+		9 => 'weight', // Read only
+		10 => 'totals', // Read only
+		11 => 'goals', // Read/write
 		14 => 'blood_pressure', // Read only. Directory=Blood Pressure
 		15 => 'monitoring_a', // Read only. Directory=Monitoring. File number=sub type.
-		20 => 'activity_summary', // Read/erase, multiple files. Directory=Activities
+		20 => 'activity_summary', // Read/erase
 		28 => 'monitoring_daily',
 		32 => 'monitoring_b', // Read only. Directory=Monitoring. File number=identifier
 		34 => 'segment', // Read/write/erase. Multiple Files. Directory=Segments
@@ -502,7 +503,11 @@ $enum_data = [
 		47 => 'boxing',
 		48 => 'floor_climbing',
 		53 => 'diving',
+		62 => 'hiit',
 		64 => 'racket',
+		65 => 'wheelchair_push_walk',
+		66 => 'wheelchair_push_run',
+		67 => 'meditation',
 		76 => 'water_tubing',
 		77 => 'wakesurfing',
 		254 => 'all', // All is for goals only to include all sports.
@@ -638,12 +643,16 @@ $enum_data = [
 		56 => 'apnea_diving', // Diving
 		57 => 'apnea_hunting', // Diving
 		58 => 'virtual_activity',
-		59 => 'obstacle', // Used for events where participants run, crawl through mud, climb over walls, etc.
+		59 => 'obstacle', // Used for events where participants run
 		62 => 'breathing',
 		65 => 'sail_race', // Sailing
 		67 => 'ultra', // Ultramarathon
 		68 => 'indoor_climbing', // Climbing
 		69 => 'bouldering', // Climbing
+		70 => 'hiit', // High Intensity Interval Training
+		73 => 'amrap', // HIIT
+		74 => 'emom', // HIIT
+		75 => 'tabata', // HIIT
 		84 => 'pickleball', // Racket
 		85 => 'padel', // Racket
 		86 => 'indoor_wheelchair_walk',
@@ -757,7 +766,7 @@ $enum_data = [
 		9 => 'lap', // Stop at end of each lap.
 		10 => 'course_point', // marker
 		11 => 'battery', // marker
-		12 => 'virtual_partner_pace', // Group 1. Start at beginning of activity if VP enabled, when VP pace is changed during activity or VP enabled mid activity. stop_disable when VP disabled.
+		12 => 'virtual_partner_pace', // Group 1. Start at beginning of activity if VP enabled
 		13 => 'hr_high_alert', // Group 0. Start / stop when in alert condition.
 		14 => 'hr_low_alert', // Group 0. Start / stop when in alert condition.
 		15 => 'speed_high_alert', // Group 0. Start / stop when in alert condition.
@@ -792,8 +801,7 @@ $enum_data = [
 		75 => 'radar_threat_alert', // start/stop/marker
 		76 => 'tank_battery_low', // marker
 		81 => 'tank_pod_connected', // marker - tank pod has connected
-		82 => 'tank_pod_disconnected', // marker - tank pod has lost connectection
-
+		82 => 'tank_pod_disconnected', // marker - tank pod has lost connection
 	],
 	'event_type' => [
 		'type' => 'enum',
@@ -1556,6 +1564,7 @@ $enum_data = [
 		3843 => 'edge_1040',
 		3850 => 'marq_golfer_asia',
 		3851 => 'venu2_plus',
+		3865 => 'gnss',
 		3869 => 'fr55',
 		3888 => 'instinct_2',
 		3905 => 'fenix7s',
@@ -1573,6 +1582,7 @@ $enum_data = [
 		3950 => 'venu2_asia',
 		3978 => 'fr945_lte_asia',
 		3982 => 'vivo_move_sport',
+		3983 => 'vivomove_trend',
 		3986 => 'approach_S12_asia',
 		3990 => 'fr255_music',
 		3991 => 'fr255_small_music',
@@ -1588,7 +1598,7 @@ $enum_data = [
 		4062 => 'edge_840',
 		4063 => 'vivosmart_5',
 		4071 => 'instinct_2_asia',
-		4105 => 'marq_gen2', // Adventurer, Athlete, Captain, Golfer
+		4105 => 'marq_gen2', // Adventurer
 		4115 => 'venusq2',
 		4116 => 'venusq2music',
 		4124 => 'marq_gen2_aviator',
@@ -1603,18 +1613,18 @@ $enum_data = [
 		4258 => 'fr265_small',
 		4260 => 'venu3',
 		4261 => 'venu3s',
-		4265 => 'tacx_neo_smart', // Neo Smart, Tacx
-		4266 => 'tacx_neo2_smart', // Neo 2 Smart, Tacx
-		4267 => 'tacx_neo2_t_smart', // Neo 2T Smart, Tacx
-		4268 => 'tacx_neo_smart_bike', // Neo Smart Bike, Tacx
-		4269 => 'tacx_satori_smart', // Satori Smart, Tacx
-		4270 => 'tacx_flow_smart', // Flow Smart, Tacx
-		4271 => 'tacx_vortex_smart', // Vortex Smart, Tacx
-		4272 => 'tacx_bushido_smart', // Bushido Smart, Tacx
-		4273 => 'tacx_genius_smart', // Genius Smart, Tacx
-		4274 => 'tacx_flux_flux_s_smart', // Flux/Flux S Smart, Tacx
-		4275 => 'tacx_flux2_smart', // Flux 2 Smart, Tacx
-		4276 => 'tacx_magnum', // Magnum, Tacx
+		4265 => 'tacx_neo_smart', // Neo Smart
+		4266 => 'tacx_neo2_smart', // Neo 2 Smart
+		4267 => 'tacx_neo2_t_smart', // Neo 2T Smart
+		4268 => 'tacx_neo_smart_bike', // Neo Smart Bike
+		4269 => 'tacx_satori_smart', // Satori Smart
+		4270 => 'tacx_flow_smart', // Flow Smart
+		4271 => 'tacx_vortex_smart', // Vortex Smart
+		4272 => 'tacx_bushido_smart', // Bushido Smart
+		4273 => 'tacx_genius_smart', // Genius Smart
+		4274 => 'tacx_flux_flux_s_smart', // Flux/Flux S Smart
+		4275 => 'tacx_flux2_smart', // Flux 2 Smart
+		4276 => 'tacx_magnum', // Magnum
 		4305 => 'edge_1040_asia',
 		4312 => 'epix_gen2_pro_42',
 		4313 => 'epix_gen2_pro_47',
@@ -1761,7 +1771,7 @@ $enum_data = [
 		3 => 'butterfly',
 		4 => 'drill',
 		5 => 'mixed',
-		6 => 'im', // IM is a mixed interval containing the same number of lengths for each of: Butterfly, Backstroke, Breaststroke, Freestyle, swam in that order.
+		6 => 'im', // IM is a mixed interval containing the same number of lengths for each of: Butterfly
 	],
 	'activity_type' => [
 		'type' => 'enum',
@@ -1812,12 +1822,12 @@ $enum_data = [
 	'left_right_balance' => [
 		'type' => 'uint8',
 		0x7F => 'mask', // % contribution
-		0x80 => 'right', // data corresponds to right if set, otherwise unknown
+		0x80 => 'right', // data corresponds to right if set
 	],
 	'left_right_balance_100' => [
 		'type' => 'uint16',
 		0x3FFF => 'mask', // % contribution scaled by 100
-		0x8000 => 'right', // data corresponds to right if set, otherwise unknown
+		0x8000 => 'right', // data corresponds to right if set
 	],
 	'length_type' => [
 		'type' => 'enum',
@@ -2121,7 +2131,6 @@ $enum_data = [
 		0x0F000000 => 'ant_transmission_type_lower_nibble',
 		0x00FF0000 => 'ant_device_type',
 		0x0000FFFF => 'ant_device_number',
-
 	],
 	'display_orientation' => [
 		'type' => 'enum',
@@ -2176,7 +2185,7 @@ $enum_data = [
 	'camera_event_type' => [
 		'type' => 'enum',
 		0 => 'video_start', // Start of video recording
-		1 => 'video_split', // Mark of video file split (end of one file, beginning of the other)
+		1 => 'video_split', // Mark of video file split (end of one file
 		2 => 'video_end', // End of video recording
 		3 => 'photo_taken', // Still photo taken
 		4 => 'video_second_stream_start',
@@ -3961,7 +3970,7 @@ $enum_data = [
 	],
 	'tissue_model_type' => [
 		'type' => 'enum',
-		0 => 'zhl_16c', // Buhlmann's decompression algorithm, version C
+		0 => 'zhl_16c', // Buhlmann's decompression algorithm
 	],
 	'dive_gas_status' => [
 		'type' => 'enum',
@@ -4003,7 +4012,7 @@ $enum_data = [
 		29 => 'switched_to_open_circuit',
 		30 => 'switched_to_closed_circuit',
 		32 => 'tank_battery_low',
-		33 => 'po2_ccr_dil_low', // ccr dilent has low po2
+		33 => 'po2_ccr_dil_low', // ccr diluent has low po2
 		34 => 'deco_stop_cleared', // a deco stop has been cleared
 		35 => 'apnea_neutral_buoyancy', // Target Depth Apnea Alarm triggered
 		36 => 'apnea_target_depth', // Neutral Buoyance Apnea Alarm triggered
@@ -4030,7 +4039,7 @@ $enum_data = [
 		3 => 'deep',
 		4 => 'rem',
 	],
-	'spo2_measuremen_type' => [
+	'spo2_measurement_type' => [
 		'type' => 'enum',
 		0 => 'off_wrist',
 		1 => 'spot_check',
@@ -4045,7 +4054,7 @@ $enum_data = [
 	'dive_gas_mode' => [
 		'type' => 'enum',
 		0 => 'open_circuit',
-		1 => 'closed_circuit_diluent'
+		1 => 'closed_circuit_diluent',
 	],
 	'favero_product' => [
 		'type' => 'uint16',
@@ -4119,11 +4128,11 @@ $enum_data = [
 		2 => 'low',
 		3 => 'unbalanced',
 		4 => 'balanced',
-
 	],
 	'no_fly_time_mode' => [
 		'type' => 'enum',
 		0 => 'standard', // Standard Diver Alert Network no-fly guidance
 		1 => 'flat_24_hours', // Flat 24 hour no-fly guidance
-	],
+
+	]
 ];
