@@ -7223,7 +7223,7 @@ class FITFile
 	 * 1 50–60%
 	 * 2 60–70%
 	 * 3 70–80%
-	 * 4	 80–90%
+	 * 4 80–90%
 	 * 5 90–100+%
 	 * @param int | float $hr_maximum - max heart rate
 	 * @param array percentages_zone - list of percentages for each upper bound of the zone

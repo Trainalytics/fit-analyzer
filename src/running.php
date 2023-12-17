@@ -60,6 +60,10 @@ $date->setTimestamp($date_s);
 			<th>Recorded</th>
 			<th>Duration</th>
 			<th>Distance</th>
+			<th>Allure</th>
+			<th>Total Ascent</th>
+			<th>Avg Temperature</th>
+			<th>Avg Vertical Oscillation</th>
 			<th>Workout Name</th>
 			<th>Average Heart Rate</th>
 			<th>Calories</th>
@@ -68,11 +72,15 @@ $date->setTimestamp($date_s);
 			<td><?= $fitFile->manufacturer() . ' ' . $fitFile->product(); ?></td>
 			<td><?= $fitFile->sport(); ?></td>
 			<td><?= $date->format('D, d-M-y H:i:s'); ?></td>
-			<td><?= gmdate('H:i:s', $fitFile->data_mesgs['session']['total_elapsed_time']); ?></td>
-			<td><?= max($fitFile->data_mesgs['record']['distance']); ?> km</td>
-			<td><?= $fitFile->data_mesgs['workout']['wkt_name']; ?></td>
-			<td><?= $fitFile->data_mesgs['session']['avg_heart_rate']; ?></td>
-			<td><?= $fitFile->data_mesgs['session']['total_calories']; ?></td>
+			<td><?= gmdate('H:i:s', $fitFile->data_mesgs['session']['total_elapsed_time']) ?></td>
+			<td><?= max($fitFile->data_mesgs['record']['distance']) ?> km</td>
+			<td><?= $fitFile->data_mesgs['session']['enhanced_avg_speed'] ?> km/h</td>
+			<td><?= $fitFile->data_mesgs['session']['total_ascent'] ?> m</td>
+			<td><?= $fitFile->data_mesgs['session']['avg_temperature'] ?>°C</td>
+			<td><?= $fitFile->data_mesgs['session']['avg_vertical_oscillation'] / 10 ?> cm</td>
+			<td><?= $fitFile->data_mesgs['workout']['wkt_name'] ?></td>
+			<td><?= $fitFile->data_mesgs['session']['avg_heart_rate'] ?> bpm</td>
+			<td><?= $fitFile->data_mesgs['session']['total_calories'] ?> kcal</td>
 		</tr>
 	</table>
 </body>
