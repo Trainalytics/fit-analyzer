@@ -5,7 +5,7 @@ use fitparse\FITFile;
 require __DIR__ . '\FITFile.php';
 
 try {
-	$file = '/running.fit';
+	$file = '/running17_12.fit';
 	$options = [
 		// Just using the defaults so no need to provide
 		//		'fix_data'	=> [],
@@ -82,6 +82,28 @@ $date->setTimestamp($date_s);
 			<td><?= $fitFile->data_mesgs['session']['avg_heart_rate'] ?> bpm</td>
 			<td><?= $fitFile->data_mesgs['session']['total_calories'] ?> kcal</td>
 		</tr>
+
+		<?php
+
+		echo '<pre>';
+		// echo '<h2>session :</h2>';
+		// var_dump($fitFile->data_mesgs['session']);
+		// echo '<h2>activity :</h2>';
+		// var_dump($fitFile->data_mesgs['activity']);
+		// echo '<h2>split :</h2>';
+		// var_dump($fitFile->data_mesgs['split']);
+		// echo '<h2>split_summary :</h2>';
+		// var_dump($fitFile->data_mesgs['split_summary']);
+		// echo '<h2>file_id :</h2>';
+		// var_dump($fitFile->data_mesgs['file_id']);
+		// echo '<h2>device_info :</h2>';
+		// var_dump($fitFile->data_mesgs['device_info']);
+		// echo '<h2>user_profile :</h2>';
+		// var_dump($fitFile->data_mesgs['user_profile']);
+		echo '<h2>record HR :</h2>';
+		var_dump($fitFile->data_mesgs['record']['heart_rate']);
+		// $fitFile->showDebugInfo();
+		?>
 	</table>
 </body>
 
