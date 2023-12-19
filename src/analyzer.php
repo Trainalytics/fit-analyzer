@@ -5,7 +5,8 @@ use fitparse\FITFile;
 require __DIR__ . '\FITFile.php';
 
 try {
-	$file = 'laz/13143560968_ACTIVITY.fit';
+	// $file = 'running/running17_12.fit';
+	$file = 'cycling/FTP-S1-1.fit';
 	$options = [
 		// Just using the defaults so no need to provide
 		//		'fix_data'	=> [],
@@ -75,9 +76,11 @@ $date->setTimestamp($date_s);
 			<td><?= $date->format('D, d-M-y H:i:s'); ?></td>
 			<td><?= gmdate('H:i:s', $fitFile->data_mesgs['session']['total_elapsed_time']) ?></td>
 			<td>
-				<?php // max($fitFile->data_mesgs['record']['distance']) 
+				<?=
+				max($fitFile->data_mesgs['record']['distance'])
 				?>
-				km</td>
+				km
+			</td>
 			<td><?= $fitFile->data_mesgs['session']['enhanced_avg_speed'] ?> km/h</td>
 			<td><?= $fitFile->data_mesgs['session']['total_ascent'] ?> m</td>
 			<td><?= $fitFile->data_mesgs['session']['avg_temperature'] ?>°C</td>
@@ -92,10 +95,10 @@ $date->setTimestamp($date_s);
 		echo '<pre>';
 		echo '<h2>session :</h2>';
 		var_dump($fitFile->data_mesgs['session']);
-		echo '<h2>activity :</h2>';
-		var_dump($fitFile->data_mesgs['activity']);
-		echo '<h2>workout :</h2>';
-		var_dump($fitFile->data_mesgs['workout']);
+		// echo '<h2>activity :</h2>';
+		// var_dump($fitFile->data_mesgs['activity']);
+		// echo '<h2>workout :</h2>';
+		// var_dump($fitFile->data_mesgs['workout']);
 		// echo '<h2>split :</h2>';
 		// var_dump($fitFile->data_mesgs['split']);
 		// echo '<h2>split_summary :</h2>';
