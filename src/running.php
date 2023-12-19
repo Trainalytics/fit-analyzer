@@ -5,7 +5,7 @@ use fitparse\FITFile;
 require __DIR__ . '\FITFile.php';
 
 try {
-	$file = '/running17_12.fit';
+	$file = '/running/running17_12.fit';
 	$options = [
 		// Just using the defaults so no need to provide
 		//		'fix_data'	=> [],
@@ -13,7 +13,8 @@ try {
 		//		'pace'		=> false
 	];
 
-	$fitFile = new FITFile(__DIR__ . $file, $options);
+	$filePath = 'd:\\Git\\github\\Trainalytics\\fit-analyzer\\activity\\';
+	$fitFile = new FITFile($filePath . $file, $options);
 } catch (\Exception $e) {
 	echo ('Caught exception: ' . $e->getMessage());
 	die();
@@ -86,8 +87,8 @@ $date->setTimestamp($date_s);
 		<?php
 
 		echo '<pre>';
-		// echo '<h2>session :</h2>';
-		// var_dump($fitFile->data_mesgs['session']);
+		echo '<h2>session :</h2>';
+		var_dump($fitFile->data_mesgs['session']);
 		// echo '<h2>activity :</h2>';
 		// var_dump($fitFile->data_mesgs['activity']);
 		// echo '<h2>split :</h2>';
@@ -100,8 +101,8 @@ $date->setTimestamp($date_s);
 		// var_dump($fitFile->data_mesgs['device_info']);
 		// echo '<h2>user_profile :</h2>';
 		// var_dump($fitFile->data_mesgs['user_profile']);
-		echo '<h2>record HR :</h2>';
-		var_dump($fitFile->data_mesgs['record']['heart_rate']);
+		// echo '<h2>record HR :</h2>';
+		// var_dump($fitFile->data_mesgs['record']['heart_rate']);
 		// $fitFile->showDebugInfo();
 		?>
 	</table>
