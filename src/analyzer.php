@@ -5,7 +5,7 @@ use fitparse\FITFile;
 require __DIR__ . '\FITFile.php';
 
 try {
-	$file = 'cycling/cycling18_12.fit';
+	$file = 'laz/13143560968_ACTIVITY.fit';
 	$options = [
 		// Just using the defaults so no need to provide
 		//		'fix_data'	=> [],
@@ -32,7 +32,7 @@ $date->setTimestamp($date_s);
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Trainalytics - Running</title>
+	<title>Trainalytics - Analyzer</title>
 	<style>
 		table {
 			font-family: arial, sans-serif;
@@ -74,7 +74,10 @@ $date->setTimestamp($date_s);
 			<td><?= $fitFile->sport(); ?></td>
 			<td><?= $date->format('D, d-M-y H:i:s'); ?></td>
 			<td><?= gmdate('H:i:s', $fitFile->data_mesgs['session']['total_elapsed_time']) ?></td>
-			<td><?= max($fitFile->data_mesgs['record']['distance']) ?> km</td>
+			<td>
+				<?php // max($fitFile->data_mesgs['record']['distance']) 
+				?>
+				km</td>
 			<td><?= $fitFile->data_mesgs['session']['enhanced_avg_speed'] ?> km/h</td>
 			<td><?= $fitFile->data_mesgs['session']['total_ascent'] ?> m</td>
 			<td><?= $fitFile->data_mesgs['session']['avg_temperature'] ?>°C</td>
