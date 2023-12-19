@@ -5,7 +5,7 @@ use fitparse\FITFile;
 require __DIR__ . '\FITFile.php';
 
 try {
-	$file = '/running/running17_12.fit';
+	$file = 'cycling/cycling18_12.fit';
 	$options = [
 		// Just using the defaults so no need to provide
 		//		'fix_data'	=> [],
@@ -89,8 +89,10 @@ $date->setTimestamp($date_s);
 		echo '<pre>';
 		echo '<h2>session :</h2>';
 		var_dump($fitFile->data_mesgs['session']);
-		// echo '<h2>activity :</h2>';
-		// var_dump($fitFile->data_mesgs['activity']);
+		echo '<h2>activity :</h2>';
+		var_dump($fitFile->data_mesgs['activity']);
+		echo '<h2>workout :</h2>';
+		var_dump($fitFile->data_mesgs['workout']);
 		// echo '<h2>split :</h2>';
 		// var_dump($fitFile->data_mesgs['split']);
 		// echo '<h2>split_summary :</h2>';
